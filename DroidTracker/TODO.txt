@@ -1,0 +1,74 @@
+*********
+* TODO: *
+*********
+
+//////////
+
+Use ConditionVariable to block locationsending thread at the beginning untill
+either x seconds (x in preferences?) passed or GPS gives result (or network if
+GPS disabled and not auto-on).
+When scanning if sending is needed, if it is a case, it should open the
+condition for previous result to go off anyway even if time is not finished and
+no GPS location has been found.
+
+Remember old settings (done already), new settings we put and when setting back,
+only do so it current equals new.
+If not, it means the user has changed them since and we don't want to mess them
+up.
+
+At each run, check if a location sending is needed in less that x minutes in
+order to start providers if needed.
+after sending, set back providers to previous state only if no location sending
+planned in less than x minutes (5 for instance?).
+This gives time to GPS to start up.
+
+Better UI: Backgroung and Headers?
+//////////
+
+
+Remove hard coded text in Tracker.java
+
+
+Add param to fetchTrackers so that they don't appear in tracker's list 
+	=> Actually I like the fact to see the temporary numbers in the list and
+	be able to stop them from here. The trackin is only transparent if the app
+	is not displayed but this is enough to me.
+	
+i18n in French
+    ==> Done!
+Finish work on auto-turning GPS/Network on and associated preferences
+	=> Won't commit this untill I find out why the broadcast is not done.
+
+Re-try squeezing a google map url at the end of the SMS with a shorter URL than
+the one sent by mail.
+	=> Done!
+
+Removes useless SMS_Broadcast thing
+
+Adds a Phone Finder Feature bypassing allowed contact and using a password.
+To do so, add a Phone Finder Password Settings menu allowing to add a password
+the first time it is used and then to change it, providing previous one.
+	=> Nice to have but maybe not necessary to my application (if preference
+	is set to no confirmation user should at least be able to have an allowed
+	tracker sending the message for him).
+!!!Update!!! ACTUALLY ADD THE PHONE FINDER OR LOST/STOLEN PHONE FEATURE WITHOUT
+PASSWORD, JUST ANOTHER PASSPHRASE: no need to overprotect this against a
+clever thief as we have no way to stop him to simply uninstall the application
+anyway which will even be easier for him than just changing the passphrase 
+
+Handle other types:
+
+  MAIL: DONE! But only for one time sending initiated by the sender (as you can
+  only send messages with a confirmation dialog)
+        
+  ANDROID: Write another android App to receive request or enrich this one (most
+  probably) and show results on a map (with possibly progression since beginning
+  of the track). Using XMPP seems to be the thing to do.
+  => This was first postponed then cancel as Google Latitude is now doing
+  exactly this
+
+Ask Permission Preference by Tracker? No urgent need as even if you don't ask,
+you see the original SMS... The Global preference should be enough for now.
+
+Handle preferences for View Mode and Activity LifeCycle to save it.
+ ==> Useless?

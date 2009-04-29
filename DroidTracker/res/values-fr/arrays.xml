@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    
+    <string-array name="tracker_actions_dialog_items">
+        <item>Envoyer ma position</item>
+        <item>Supprimer de la liste</item>
+        <item>Mise à jour du Contact</item>
+    </string-array>
+    
+    <string-array name="twitter_tracker_actions_dialog_items">
+        <item>Envoyer ma position</item>
+    </string-array>
+    
+    <string-array name="tracking_recurrence">
+        <item>Une fois par SMS</item>
+        <item>Une fois par mail</item>
+        <item>Régulièrement par SMS</item>
+    </string-array>
+</resources>
