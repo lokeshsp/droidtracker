@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+  
+  	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal">
+    	<Spinner android:id="@+id/period_spinner"
+						 android:layout_width="wrap_content"
+						 android:layout_height="wrap_content"
+						 android:entries="@array/tracking_recurrence"
+						 />
+	</LinearLayout>
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_horizontal">
+					 
+	    <TextView
+			android:id="@+id/period_prefix" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="16sp"
+			android:paddingRight="12sp"
+			android:text="@string/periodicity_label_every" />
+		<EditText android:id="@+id/ms_period"
+				  android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:gravity="right"
+			      android:text="30"
+			      >
+		<requestFocus />
+		</EditText>
+		<TextView
+			android:id="@+id/period_suffix" 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="16sp"
+			android:paddingLeft="12sp"
+			android:text="@string/periodicity_label_minutes" />
+	</LinearLayout>
+</LinearLayout>

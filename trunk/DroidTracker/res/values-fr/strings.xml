@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">DroidTracker</string>
+
+	<string name="trackers_list_title">Liste des Traqueurs</string>
+	<string name="no_trackers">Personne!</string>
+	<string name="all_trackers_label">Contacts autorisés à me traquer</string>
+	<string name="tracking_only_label">Traques en cours</string>
+	<string name="new_tracker_menu">Accorder Permission</string>
+	<string name="remove_tracker_menu">Supprimer Permission</string>
+	<string name="start_tracking_menu">Envoyer ma position</string>
+	<string name="stop_tracking_menu">Stopper toutes les traques</string>
+	<string name="settings_menu">Preferences</string>
+	<string name="about_menu">A propos/Aide</string>
+
+
+	<string name="stop_tracking_dialog_body">Arrêter la traque en cours?</string>
+
+	<string name="idle_tracker_dialog_title">Actions pour ce traqueur:</string>
+	<string name="idle_twitter_tracker_dialog_title">Publier sur Twitter</string>
+
+	<string name="ok_button_label">Ok</string>
+	<string name="cancel_button_label">Annuler</string>
+
+	<string name="tracking_request_msg_title">Demande de Traque!</string>
+	<string name="tracking_request_msg_body">Accepter la demande de</string>
+	<string name="tracking_request_msg_button_accept">Accepter</string>
+	<string name="tracking_request_msg_button_refuse">Refuser</string>
+
+	<string name="tracking_confirmation_text">Envoyer ma position à </string>
+	<string name="tracking_period">Periode de l'envoi (en mn):</string>
+	<string name="confirm_tracking">Envoyer</string>
+	<string name="cancel_tracking">Annuler</string>
+
+	<string name="invalid_period_dialog_title">Periode Invalide!</string>
+	<string name="invalid_period_dialog_message">La periode doit être un nombre entier de
+		minutes.\nVotre demande a été annulée.</string>
+
+	<string name="result_prefix">Voici ma dernière position connue:\n\n
+	</string>
+	<string name="result_source">Source:</string>
+	<string name="result_when">\nDate:</string>
+	<string name="result_where">\n\n</string>
+	<string name="result_geocode">\n</string>
+	<string name="result_map_url">\n\nURL de carte:\n</string>
+
+	<string name="twitter_msg_header">Je suis ici: </string>
+
+	<string name="tracking_refused_msg">Désolé votre demande de traque a été refusée.
+	</string>
+
+	<string name="preferences_sms_category_label">Preferences SMS</string>
+
+	<string name="preferences_sms_start_passphrase_label">Phrase de démarrage</string>
+	<string name="preferences_sms_start_passphrase_summary">Configure la phrase qui demarre une traque
+		si reçu d'un contact autorisé.</string>
+	<string name="preferences_sms_start_passphrase_default">Ou es tu?</string>
+
+	<string name="preferences_sms_stop_passphrase_label">Phrase d'arrêt</string>
+	<string name="preferences_sms_stop_passphrase_summary">Configure la phrase qui stoppe une traque
+		si reçu du traqueur.</string>
+	<string name="preferences_sms_stop_passphrase_default">Stop</string>
+
+	<string name="preferences_sms_period_passphrase_label">Configure la phrase de periode</string>
+	<string name="preferences_sms_period_passphrase_summary">Configure la phrase qui fixe la période si
+		contenue dans un SMS de démarrage de traque.</string>
+	<string name="preferences_sms_period_passphrase_default">Toutes les {x} mn</string>
+	<string name="preferences_sms_period_passphrase_error_dialog_title">Phrase Invalide!</string>
+	<string name="preferences_sms_period_passphrase_error_dialog_msg">The phrase de periode doit respecter le format
+		suivant:\n \"du texte {x} du texte\"\nPar exemple:\n \"Toutes les {x}
+		minutes\"</string>
+
+
+	<string name="lostphone_mode_label">Mode Tél volé ou perdu</string>
+	<string name="lostphone_mode_summary">Configure l'activation du mode téléphone
+		volé/perdu et la phrase declancheuse.</string>
+	<string name="activate_lostphone_mode_label">Activer le mode tél volé/perdu</string>
+	<string name="activate_lostphone_mode_summary">Si cochée, active le mode téléphone volé/perdu.
+	</string>
+	<string name="preferences_sms_lostphone_passphrase_label">Phrase de déclanchement</string>
+	<string name="preferences_sms_lostphone_passphrase_summary">Configure la phrase qui demarre une traque
+		si reçu par SMS depuis n'importe quel numéro sans confirmation ou
+		notification.</string>
+	<string name="preferences_sms_lostphone_passphrase_default">Je veux mon téléphone!</string>
+
+
+	<string name="tracking_confirmation_requested_label">Demande de Confirmation</string>
+	<string name="tracking_confirmation_requested_summary">Si cochée, demande confirmation lors de la
+		réception d'une demande de traque par SMS.</string>
+
+	<string name="preferences_sending_category_label">Preferences d'envoie</string>
+	<string name="preferences_display_info_when_sending_label">Notifie à l'envoie</string>
+	<string name="preferences_display_info_when_sending_summary">Si cochée, affiche une notification lord de
+		l'envoie de position.</string>
+
+	<string name="preferences_auto_turn_providers_on_label">Activation GPS/Réseaux automatique
+	</string>
+	<string name="preferences_auto_turn_providers_on_summary">Si cochée, active automatiquement les sources de
+		positions (GPS ou réseau) avant d'envoyer et les remet ensuite dans
+		leur
+		état initial.</string>
+
+	<string name="periodicity_label_every">Toutes les</string>
+	<string name="periodicity_label_minutes">minute(s)</string>
+
+	<string name="tracker_periodicity_prefix">traque à</string>
+	<string name="tracker_periodicity_suffix">mn</string>
+
+	<string name="about_label">A propos</string>
+	<string name="about_version">DroidTracker v1.9</string>
+	<string name="about_author">
+		par Olivier Bonal\n
+	</string>
+	<string name="about_text">Le but de cette application est de vous permettre de partager votre position géographique avec vos proches, sous forme d'une adresse lisible, en utilisant le SMS. Ce qui veut dire que même votre grand-mère qui n'a ni SmartPhone ni ordinateur peut savoir ou vous êtes à chaque instant si elle a un téléphone capable d'envoyer et recevoir des SMS.! ;-)\nTout contact a qui vous donnez l'autorisation peut vous envoyer un SMS contenant une phrase clé (que vous définissez) pour demander votre position.\nQuand votre téléphone reçoit ce SMS, il demande votre confirmation (ou pas selon vos préférences) et répond ensuite automatiquement à la demande en envoyant votre position exacte (adresse + lien Google map). La position est alors envoyée une fois ou à intervalles réguliers selon le choix du demandeur (i.e. des phrases clés mises dans son SMS).\nVous pouvez également déclencher vous-même l'envoie depuis l'application aux contacts autorisés. Vous pouvez choisir d'envoyer votre position une fois ou à intervalles réguliers avec même une option d'envoie de position par mail ou par Twitter (si Twidroid est installée).\nUn mode téléphone perdu/volé vous permet également de configurer une phrase de déclenchement secrète capable de déclencher l'envoie de position sans demande de confirmation ou notification, même si reçue d'un contact non autorisé, donc pouvant être reçue depuis n'importe quel téléphone. Cette fonctionnalité peut être très utile pour retrouver son téléphone s'il a été perdu ou volé. Comme avec la phrase de déclenchement standard, la position est envoyée une fois ou périodiquement (si la phrase de période est également présente dans le SMS).\nA noter que selon les préférences utilisateurs, l'application peut activer automatiquement les source le localisation (GPS/réseaux) si besoin.\n\nAttention: Comme vous avez probablement deviné, cette application peut envoyer un nombre important de SMS et doit donc être utilisée avec précaution si votre forfait ne comprend pas les SMS illimités.
+	</string>
+	<string name="about_footer">\n\nIcones de menus par Axialis Team:
+		http://www.axialis.com/free/icons</string>
+
+	<string name="help_label">Aide</string>
+	<string name="help_header">
+		<b>Aide de DroidTracker</b>
+		\n\n
+	</string>
+	<string name="help_text">
+	<b>Ecran d'acceuil</b> \nL'écran d'acceuil de cette application est la liste de tous les traqueurs, i.e. des personnes, parmis vos contacts, que vous autorisez ) demander par SMS (et à recevoir en retour) votre position. Au premier lancement, cette liste sera vide. Pour ajouter un nouveau traqueur, utilser le menu \"Accorder Permission\" permettant de le choisir parmis vos contacts.\nLa boite de choix en haut de l'écran vous permets de changer l'affichage vous permettant de ne voir que les personnes qui sont en train de vous traquer. Cependant, même dans le mode par défaut, les personnes en train de vous traquer sont mises en évidence.\nAttention: Lorsqu'on ajoute un nouveau traqueur, une partie des informations de ce contact est copiée dans l'application. Si les informations de ce contact changent (changement de numéro, ajout de l'adresse mail...), assurez-vous de metre à jour ce contact en appuyant simplement sur le nom du contact et choisissant \"Mise à jour du Contact\" dans le menu.\n Vous pouvez bien sur retirer l'autorisation de vous traquer à n'importe quel contact. Pour ce faire, appuyer simplement sur le nom du contact dans la liste et choisissez l'option appropriée dans le menu.\n\n <b>Démarrer l'envoie de position (à l'initiative du traqueur) </b> \nCeci se fait par SMS. Toute personne souhaitant recevoir votre position doit vous envoyer une SMS de demande (ou vous laissez initier la traque, cf section suivante). Ce SMS doit contenir la phrase de déclanchement que vous aurez vous-même définie dans les préférences ("Ou es tu?" par défaut). Une phrase de déclanchement additionnelle peut-être définie pour demander une période ou fréquence de traque. Si cette phrase est présente en plus de la phrase de déclanchement, votre position sera envoyé régulièrement à la fréquence (en mn) définie dans cette phrase. Cette phrase de période est également définie dans les préférences ("Toutes les {x} mn" par défaut).\nSi la phrase de déclanchement est seule présente dans le SMS, la position ne sera envoyé qu'une fois. La phrase de déclanchement DOIT être présente dans le SMS pour qu'une traque puisse commencer alors que la phrase de période est optionnelle.\nNotez que toutes ces phrases sont analyser sans tenir compte des majuscules/minuscules.\n\n <b>Démarrer l'envoie de position (à votre initiative)</b> \nVous pouvez décider d'envoyer vous-même votre position. Pour ce faire, depuis la liste des traqueurs, appuyer simplement sur le nom du contact à qui vous souhaitez envoyer votre position. Un menu apparait dans lequel il suffit de choisir \"Envoyer ma position\" (Notez que cette option ne sera disponible que si ce contact n'est pas déjà en train de vous traquer). Vous pourrez ensuite choisir la périodicité de la traque entre: \"Une fois par SMS\", \"Une fois par mail\" ou \"Régulièrement par SMS\" (ce dernier vous laissant spécifier une période en minutes). Vous pouvez ensuite démarrer la traque ou annuler l'opération.\n\n <b>Stopper l'envoie de position (à l'initiative du traqueur) </b> \nCeci se fait également par SMS. Un traqueur peut arrêter l'envoie périodique de position en vous envoyant un SMS contenant la phrase d'arrêt. Cette phrase est définie dans les préférences de l'application (\"Stop\" par défaut).\n\n <b>Stopper l'envoie de position (à votre initiative)</b> \nDepuis la liste des traqueurs, appuyer simplement sur le nom du contact à qui vous souhaitez arreter d'envoyer votre position. Un menu apparaitra alors vous permettant de choisir \"Arrêter la traque en cours\". Notez que cette option n'apparaitra que si ce contact est effectivement en train de vous traquer.\n\n <b>Confirmations et Notifications</b> \nL'application demande votre confirmation chaque fois qu'une demande est reçue par SMS. Une notification est également affichée chaque fois que votre position est envoyée. Ces deux sécurités peuvent être désactivées dans les préférences de l'application.\n\n <b>Mode téléphone perdu/volé</b> \nLe mode téléphone perdu/volé vous permet de définir une phrase secrète vous permettant de recevoir votre position depuis n'importe quel téléphone sans demande de confirmation ou notification. Vous pouvez activer/desactiver ce mode et configurer la phrase de déclanchement correspondante depuis la page de préférences de l'application.\n\n <b>Auto activation des sources de localisation</b> \nDepuis la version 1.8, les sources de localisation (GPS et réseaux) peuvent être activées automatiquement (si elles sont désactivées) au moment ou l'application les utilise. Cette activation automatique interviendra bien sur seulement si l'utilisateur en a fait le choix sur la page de préférence via l'option \"Activation GPS/Réseaux automatique\".\n<b>ATTENTION:</b> A partir de la version 1.5 d'Android (cupcake), il ne sera plus possible à une application de changer les paramètres systèmes tels que l'activation des sources de localisation. Dans la prochaine version de DroidTracker, cette fonctionnalité va donc disparaitre et sera remplacée par l'affichage de l'écran de paramétrage des sources de localisation en début de traque si nécessaire.\n\n <b>Intégration avec Twitter</b>\nLorsque l'application Twidroid (client Twitter le plus populaire pour Android) est installée, Droidtracker interagit avec elle en faisant apparaître Twitter comme un contact autorisé dans la liste des traqueurs potentiels. En sélectionnant ce contact particulier (qui apparaît en début de liste), l'utilisateur peut publier sa position courante sur Twitter. Comme pour l'envoie à un contact de sa position par mail, l'envoie par Twitter ne peut pas se faire automatique à intervalle donné car il nécessite une confirmation d'envoi de l'utilisateur.\n
+	</string>
+	<string name="faq_label">FAQ</string>
+	<string name="faq_header">
+		<b>Questions fréquentes</b>
+		\n\n
+	</string>
+	<string name="faq_text">
+		<b>Parfois, la position envoyée n'est pas très précise, pourquoi? </b> \nIl existe 2 sources de localisation: les réseaux et le GPS.\nLa source GPS est la plus précise mais elle utilise des satelites et a donc besoin d'une vision claire du ciel pour fonctionner.\nLa localisation par réseaux utilise les réseaux GSM et WiFi. Elle est un peu moins précise mais permet de répérer au moins le quartier ou vous vous trouvez ou mieux selon l'endroit ou vous êtes (peut-être assez précis en ville). Cette source fonctionne par contre aussi bien à l'intérieur qu'à l'extérieur.\n Dans le message que le trackeur recoit, la source utilisée (GPS ou réseaux) est précisée.\n\n <b>Pourquoi peut-il s'écouler 2/3 minutes entre l'envoi du message de traque et la réception de la position par SMS?</b> \nComme expliqué plus haut, il existe 2 sources de localisation. Le GPS est la source la plus précise mais il met plus longtemps à répondre que la source réseaux. Si le GPS est activé (ou désactivé mais que l'option d'auto activation est cochée), l'application attendra une position du GPS pendant 2 minutes. Si au bout de ce temps, rien n'est reçu, la dernière position réseau reçue sera envoyée. C'est ce qui explique ce délai mais qui permet d'envoyer une position plus précise lorsque c'est possible. \n\n <b>Je ne vois pas Twitter dans ma liste de traqueurs, pourquoi? </b>\nTwitter n'est visible dans la liste de contact seulement si l'application Twidroid est installée sur votre téléphone. Il vous suffit donc d'aller la récupérer sur l'Android Market pour activer cette fontionnalité. \n\n <b>J'ai lu que l'activation automatique ne sera plus possible à partir de la version 1.5 d'Android (cupcake), que va devenir cette fonctionnalité de DroidTracker? </b>\nC'est exact, à partir de la version 1.5 d'Android (cupcake), il ne sera plus possible à une application de changer les paramètres systèmes tels que l'activation des sources de localisation. Dans la prochaine version de DroidTracker, cette fonctionnalité va donc disparaitre et sera remplacée par l'affichage de l'écran de paramétrage des sources de localisation en début de traque si nécessaire.
+	</string> 
+	<string name="mail_subject">Ma position actuelle</string>
+	<string name="chooser_title">Envoyer ma Position</string>
+	<string name="location_unknown_msg">La position n'a pu être déterminée.</string>
+	<string name="location_no_translation_msg">Impossible de traduire la
+		latitude/longitude courant en adresse lisible.</string>
+
+	<string name="sent_notication_title_prefix">Position envoyée à</string>
+
+</resources>

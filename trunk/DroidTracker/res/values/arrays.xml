@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    
+    <string-array name="tracker_actions_dialog_items">
+        <item>Start Sending Info</item>
+        <item>Remove Tracking Permission</item>
+        <item>Refresh Contact Data</item>
+    </string-array>
+    
+    <string-array name="twitter_tracker_actions_dialog_items">
+        <item>Publish My Location</item>
+    </string-array>
+    
+    <string-array name="tracking_recurrence">
+        <item>Only Once By SMS</item>
+        <item>Only Once By Mail</item>
+        <item>Periodically By SMS</item>
+    </string-array>
+    
+</resources>
