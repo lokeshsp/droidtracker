@@ -16,7 +16,8 @@
 
 	<string name="stop_tracking_dialog_body">Stop Current Tracking?</string>
 
-	<string name="idle_tracker_dialog_title">Actions for this Tracker:</string>
+	<string name="idle_tracker_dialog_title">Actions for </string>
+	<string name="idle_tracker_dialog_title_default_tracker_name">this tracker</string>
 	<string name="idle_twitter_tracker_dialog_title">Publish on Twitter</string>
 
 	<string name="ok_button_label">Ok</string>

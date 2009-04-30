@@ -43,6 +43,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -76,6 +77,8 @@ public class DroidTracker extends ListActivity implements
         
         ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>( this,
                                                                          android.R.layout.simple_spinner_item);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinner_adapter.add( getString( R.string.all_trackers_label));
         spinner_adapter.add( getString( R.string.tracking_only_label));
         spinner.setAdapter( spinner_adapter);
@@ -193,8 +196,6 @@ public class DroidTracker extends ListActivity implements
     private Drawable getContactImage(long tracker_id) {
         Uri mContacts = Contacts.Photos.CONTENT_URI;
         
-        // Contacts.PhotosColumns.
-        
         String[] picture_projection = new String[] {
                 Contacts.PhotosColumns.PERSON_ID, Contacts.PhotosColumns.DATA };
         
@@ -212,14 +213,8 @@ public class DroidTracker extends ListActivity implements
             c.moveToFirst();
             try {
                 byte[] test = c.getBlob( picture_col);
-                // new Drawable()
-                System.out.println( "DroidTracker.getContactImage(), test size = "
-                        + test.length);
                 ByteArrayInputStream is = new ByteArrayInputStream( test);
-                // Picture p = Picture.createFromStream( is);
-                return PictureDrawable.createFromStream( is, "Test");
-                
-                // return new PictureDrawable( p);
+                return PictureDrawable.createFromStream( is, "contact_pic");
             } catch ( Exception e) {
                 System.err.println( "DroidTracker.getContactImage(), error = "
                         + e.getMessage());
@@ -316,7 +311,8 @@ public class DroidTracker extends ListActivity implements
         final AlertDialog.Builder alert_builder = new AlertDialog.Builder( DroidTracker.this);
         switch ( id) {
             case DIALOG_STOP_TRACKING:
-                alert_builder.setIcon( R.drawable.stop_tracking);
+                // alert_builder.setIcon( R.drawable.stop_tracking);
+                setDialogIconFromSelectedTracker( alert_builder);
                 alert_builder.setTitle( R.string.stop_tracking_dialog_body);
                 alert_builder.setPositiveButton( R.string.ok_button_label,
                                                  new DialogInterface.OnClickListener() {
@@ -363,7 +359,9 @@ public class DroidTracker extends ListActivity implements
                                         });
                 return alert_builder.create();
             case DIALOG_IDLE_TRACKER_MENU:
-                alert_builder.setTitle( R.string.idle_tracker_dialog_title);
+                setDialogIconFromSelectedTracker( alert_builder);
+                alert_builder.setTitle( getText( R.string.idle_tracker_dialog_title)
+                        + " " + getSelectedTrackerName());
                 alert_builder.setItems( R.array.tracker_actions_dialog_items,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog,
@@ -421,20 +419,9 @@ public class DroidTracker extends ListActivity implements
                 };
                 spinner.setOnItemSelectedListener( l);
                 
-                final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
-                String title = getText( R.string.tracking_confirmation_text)
-                        + " " + selectedTracker + "?";
-                Drawable contact_pic = ( selectedTracker == null) ? null
-                        : getContactImage( selectedTracker.id);
-                if ( contact_pic != null) {
-                    alert_builder.setIcon( contact_pic);
-                } else {
-                    alert_builder.setIcon( R.drawable.user_small);
-                }
-                
-                alert_builder.setTitle( title);
-                // alert_builder.setIcon( R.drawable.start_tracking);
-                // alert_builder.setTitle( R.string.tracking_confirmation_text);
+                setDialogIconFromSelectedTracker( alert_builder);
+                alert_builder.setTitle( getText( R.string.tracking_confirmation_text)
+                        + " " + getSelectedTrackerName() + "?");
                 
                 alert_builder.setView( textEntryView);
                 alert_builder.setPositiveButton( R.string.confirm_tracking,
@@ -536,29 +523,62 @@ public class DroidTracker extends ListActivity implements
         return null;
     }
     
+    private void setDialogIconFromSelectedTracker(final AlertDialog.Builder alert_builder) {
+        final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
+        if ( DroidTrackerUtils.isTwitter( selectedTracker)) {
+            alert_builder.setIcon( R.drawable.twitter);
+        } else {
+            Drawable contact_pic = ( selectedTracker == null) ? null
+                    : getContactImage( selectedTracker.id);
+            if ( contact_pic != null) {
+                alert_builder.setIcon( contact_pic);
+            } else {
+                alert_builder.setIcon( R.drawable.user_small);
+            }
+        }
+    }
+    
+    private String getSelectedTrackerName() {
+        final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
+        if ( selectedTracker != null) {
+            return selectedTracker.name;
+        } else {
+            return getString( R.string.idle_tracker_dialog_title_default_tracker_name);
+        }
+    }
+    
     @Override
     protected void onPrepareDialog(int id, Dialog dialog) {
         super.onPrepareDialog( id, dialog);
+        final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
         switch ( id) {
             case DIALOG_START_TRACKING:
-                final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
-                String title = getText( R.string.tracking_confirmation_text)
-                        + " " + selectedTracker + "?";
-                dialog.setTitle( title);
-                if ( dialog instanceof AlertDialog) {
-                    Drawable contact_pic = ( selectedTracker == null) ? null
-                            : getContactImage( selectedTracker.id);
-                    if ( contact_pic != null) {
-                        ( (AlertDialog) dialog).setIcon( contact_pic);
-                    } else {
-                        ( (AlertDialog) dialog).setIcon( R.drawable.user_small);
-                    }
-                }
+                dialog.setTitle( getText( R.string.tracking_confirmation_text)
+                        + " " + getSelectedTrackerName() + "?");
+                setDialogTitleFromSelectedTracker( dialog, selectedTracker);
                 
                 break;
-            
+            case DIALOG_IDLE_TRACKER_MENU:
+                dialog.setTitle( getText( R.string.idle_tracker_dialog_title)
+                        + " " + getSelectedTrackerName());
+                setDialogTitleFromSelectedTracker( dialog, selectedTracker);
+                
+                break;
             default:
                 break;
+        }
+    }
+    
+    private void setDialogTitleFromSelectedTracker(Dialog dialog,
+                                                   final Tracker selectedTracker) {
+        if ( dialog instanceof AlertDialog) {
+            Drawable contact_pic = ( selectedTracker == null) ? null
+                    : getContactImage( selectedTracker.id);
+            if ( contact_pic != null) {
+                ( (AlertDialog) dialog).setIcon( contact_pic);
+            } else {
+                ( (AlertDialog) dialog).setIcon( R.drawable.user_small);
+            }
         }
     }
     

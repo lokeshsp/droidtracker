@@ -16,8 +16,10 @@
 
 	<string name="stop_tracking_dialog_body">Arrêter la traque en cours?</string>
 
-	<string name="idle_tracker_dialog_title">Actions pour ce traqueur:</string>
+	<string name="idle_tracker_dialog_title">Actions pour </string>
+	<string name="idle_tracker_dialog_title_default_tracker_name">ce traqueur</string>
 	<string name="idle_twitter_tracker_dialog_title">Publier sur Twitter</string>
+
 
 	<string name="ok_button_label">Ok</string>
 	<string name="cancel_button_label">Annuler</string>
