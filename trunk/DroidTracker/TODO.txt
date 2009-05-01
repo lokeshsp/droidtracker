@@ -2,7 +2,28 @@
 * TODO: *
 *********
 
-//////////
+
+  -> Removes Auto GPS on
+  -> Add Use Cases in doc
+  -> Possibly, new UI with start page presenting use cases like menus
+  -> Take Picture and/or record audio and send by Mail (or publish on Picasa for pictures)
+  -> Send by Mail periodically
+  -> Send to Twitter periodically
+  -> Shortcut to create Contacts
+        -> Grant Permission becomes Add Tracker
+          -> Choice: 1)From Contact List? 2)Brand New Tracker?
+          -> 1) As of today
+          -> 2) Input form, Name and Number. Checkbox to create contact or not
+  -> Send to FaceBook
+  -> Other SMS features?
+  -> Create my own intent to perform an action on SMS
+  -> See how to abstract part of the architecture to allow other projets to
+     use only part of my app to developp similar applications (split GPS part,
+     SMS part, abstract action handler).
+
+
+
+/////DONE/////
 
 Use ConditionVariable to block locationsending thread at the beginning untill
 either x seconds (x in preferences?) passed or GPS gives result (or network if
@@ -26,7 +47,7 @@ Better UI: Backgroung and Headers?
 //////////
 
 
-Remove hard coded text in Tracker.java
+DONE: Remove hard coded text in Tracker.java
 
 
 Add param to fetchTrackers so that they don't appear in tracker's list 
@@ -38,7 +59,7 @@ i18n in French
     ==> Done!
 Finish work on auto-turning GPS/Network on and associated preferences
 	=> Won't commit this untill I find out why the broadcast is not done.
-
+    
 Re-try squeezing a google map url at the end of the SMS with a shorter URL than
 the one sent by mail.
 	=> Done!
