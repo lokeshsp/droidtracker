@@ -40,7 +40,6 @@ import android.os.ConditionVariable;
 import android.os.IBinder;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -55,11 +54,11 @@ public class TrackingInfoSenderService extends Service implements Runnable {
     private LocationManager locationManager;
     private boolean gpsAvailable;
     private boolean firstTime = true;
-    private String initialAllowedLocationProviders = "";
+//    private String initialAllowedLocationProviders = "";
     private Vector<Tracker> sessionOneOffTrackers = new Vector<Tracker>();
     private Vector<Tracker> sessionPeriodicTrackersToBeWarned = new Vector<Tracker>();
     private boolean locationTrackingOn = false;
-    private String autoSetAllowedLocationProviders = null;
+//    private String autoSetAllowedLocationProviders = null;
     private ConditionVariable sendingCondition;
     private boolean waitingToSend = false;
     
@@ -81,7 +80,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 // location is on but
                 // GPS is off and auto-on option is not set.
                 if ( ( LocationManager.GPS_PROVIDER.equals( location.getProvider()) && gpsAvailable)
-                        || ( gpsLastStatus == LocationProvider.OUT_OF_SERVICE && !isProvidersAutoTurnOnOptionOn())) {
+                        || ( gpsLastStatus == LocationProvider.OUT_OF_SERVICE)) { // && !isProvidersAutoTurnOnOptionOn())) {
                     sendingCondition.open();
                 }
             }
@@ -350,9 +349,9 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         // Remove location change listeners
         locationManager.removeUpdates( locationChangesListener);
         
-        // Put Location Provider's states back to where they were when tracking
-        // started
-        resetLocationProvidersToOriginalStateIfNeeded();
+//        // Put Location Provider's states back to where they were when tracking
+//        // started
+//        resetLocationProvidersToOriginalStateIfNeeded();
         
         locationTrackingOn = false;
     }
@@ -563,9 +562,9 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 Looper.prepare();
                 Log.d( IDroidTrackerConstants.CAUCHY_LOG,
                        " --------> Turning on location change listeners.");
-                // Turn on location providers if they're off and the auto
-                // turn-on is set in preferences
-                turnLocationProvidersOnIfNeeded( getApplicationContext());
+//                // Turn on location providers if they're off and the auto
+//                // turn-on is set in preferences
+//                turnLocationProvidersOnIfNeeded( getApplicationContext());
                 gpsAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER);
                 try {
                     locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
@@ -592,97 +591,97 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         t.start();
     }
     
-    /**
-     * Turn on location providers if they're off and the auto turn-on is set in
-     * preferences.
-     * 
-     * @param context
-     */
-    private void turnLocationProvidersOnIfNeeded(final Context context) {
-        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-        Log.i( IDroidTrackerConstants.CAUCHY_LOG, "auto_turn_providers_on = "
-                + auto_turn_providers_on);
-        if ( auto_turn_providers_on) {
-            initialAllowedLocationProviders = Settings.System.getString( context.getContentResolver(),
-                                                                         Settings.System.LOCATION_PROVIDERS_ALLOWED);
-            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-                   "TrackingInfoSenderService.turnLocationProvidersOnIfNeeded() active_location_providers = "
-                           + initialAllowedLocationProviders);
-            if ( initialAllowedLocationProviders == null
-                    || initialAllowedLocationProviders.length() == 0) {
-                Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-                       "                                    No location providers! Activating them! ");
-                setAllowedLocationProviders( context,
-                                             LocationManager.NETWORK_PROVIDER
-                                                     + ","
-                                                     + LocationManager.GPS_PROVIDER);
-            } else {
-                StringBuffer new_providers = new StringBuffer( initialAllowedLocationProviders);
-                if ( !initialAllowedLocationProviders.contains( LocationManager.NETWORK_PROVIDER)) {
-                    new_providers.append( ","
-                            + LocationManager.NETWORK_PROVIDER);
-                }
-                if ( !initialAllowedLocationProviders.contains( LocationManager.GPS_PROVIDER)) {
-                    new_providers.append( "," + LocationManager.GPS_PROVIDER);
-                }
-                if ( new_providers.length() > initialAllowedLocationProviders.length()) {
-                    setAllowedLocationProviders( context,
-                                                 new_providers.toString());
-                }
-            }
-        }
-    }
+//    /**
+//     * Turn on location providers if they're off and the auto turn-on is set in
+//     * preferences.
+//     * 
+//     * @param context
+//     */
+//    private void turnLocationProvidersOnIfNeeded(final Context context) {
+//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+//        Log.i( IDroidTrackerConstants.CAUCHY_LOG, "auto_turn_providers_on = "
+//                + auto_turn_providers_on);
+//        if ( auto_turn_providers_on) {
+//            initialAllowedLocationProviders = Settings.System.getString( context.getContentResolver(),
+//                                                                         Settings.System.LOCATION_PROVIDERS_ALLOWED);
+//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+//                   "TrackingInfoSenderService.turnLocationProvidersOnIfNeeded() active_location_providers = "
+//                           + initialAllowedLocationProviders);
+//            if ( initialAllowedLocationProviders == null
+//                    || initialAllowedLocationProviders.length() == 0) {
+//                Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+//                       "                                    No location providers! Activating them! ");
+//                setAllowedLocationProviders( context,
+//                                             LocationManager.NETWORK_PROVIDER
+//                                                     + ","
+//                                                     + LocationManager.GPS_PROVIDER);
+//            } else {
+//                StringBuffer new_providers = new StringBuffer( initialAllowedLocationProviders);
+//                if ( !initialAllowedLocationProviders.contains( LocationManager.NETWORK_PROVIDER)) {
+//                    new_providers.append( ","
+//                            + LocationManager.NETWORK_PROVIDER);
+//                }
+//                if ( !initialAllowedLocationProviders.contains( LocationManager.GPS_PROVIDER)) {
+//                    new_providers.append( "," + LocationManager.GPS_PROVIDER);
+//                }
+//                if ( new_providers.length() > initialAllowedLocationProviders.length()) {
+//                    setAllowedLocationProviders( context,
+//                                                 new_providers.toString());
+//                }
+//            }
+//        }
+//    }
     
-    /**
-     * @return
-     */
-    private boolean isProvidersAutoTurnOnOptionOn() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences( this);
-        boolean auto_turn_providers_on = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON,
-                                                           true);
-        return auto_turn_providers_on;
-    }
+//    /**
+//     * @return
+//     */
+//    private boolean isProvidersAutoTurnOnOptionOn() {
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences( this);
+//        boolean auto_turn_providers_on = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON,
+//                                                           true);
+//        return auto_turn_providers_on;
+//    }
     
-    /**
-     * Put Location Provider's states back to where they were when service
-     * started.
-     */
-    private void resetLocationProvidersToOriginalStateIfNeeded() {
-        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-        if ( auto_turn_providers_on) {
-            String currently_allowed_providers = Settings.System.getString( getApplicationContext().getContentResolver(),
-                                                                            Settings.System.LOCATION_PROVIDERS_ALLOWED);
-            // Set back initial allowed location providers only if the user
-            // has not changed them since as we don't want to mess them up if
-            // so.
-            if ( autoSetAllowedLocationProviders != null
-                    && autoSetAllowedLocationProviders.equals( currently_allowed_providers)) {
-                setAllowedLocationProviders( getApplicationContext(),
-                                             initialAllowedLocationProviders);
-            }
-        }
-    }
+//    /**
+//     * Put Location Provider's states back to where they were when service
+//     * started.
+//     */
+//    private void resetLocationProvidersToOriginalStateIfNeeded() {
+//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+//        if ( auto_turn_providers_on) {
+//            String currently_allowed_providers = Settings.System.getString( getApplicationContext().getContentResolver(),
+//                                                                            Settings.System.LOCATION_PROVIDERS_ALLOWED);
+//            // Set back initial allowed location providers only if the user
+//            // has not changed them since as we don't want to mess them up if
+//            // so.
+//            if ( autoSetAllowedLocationProviders != null
+//                    && autoSetAllowedLocationProviders.equals( currently_allowed_providers)) {
+//                setAllowedLocationProviders( getApplicationContext(),
+//                                             initialAllowedLocationProviders);
+//            }
+//        }
+//    }
     
-    /**
-     * @param context
-     * @param allowed_location_providers
-     */
-    private void setAllowedLocationProviders(final Context context,
-                                             String allowed_location_providers) {
-        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-        if ( !auto_turn_providers_on) {
-            return;
-        }
-        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-               "Setting allowed location providers to: "
-                       + allowed_location_providers);
-        Settings.System.putString( context.getContentResolver(),
-                                   Settings.System.LOCATION_PROVIDERS_ALLOWED,
-                                   allowed_location_providers);
-        autoSetAllowedLocationProviders = allowed_location_providers;
-        Intent intent = new Intent( "android.intent.action.ACTION_PROVIDER_CHANGED");
-        context.sendBroadcast( intent);
-    }
+//    /**
+//     * @param context
+//     * @param allowed_location_providers
+//     */
+//    private void setAllowedLocationProviders(final Context context,
+//                                             String allowed_location_providers) {
+//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+//        if ( !auto_turn_providers_on) {
+//            return;
+//        }
+//        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+//               "Setting allowed location providers to: "
+//                       + allowed_location_providers);
+//        Settings.System.putString( context.getContentResolver(),
+//                                   Settings.System.LOCATION_PROVIDERS_ALLOWED,
+//                                   allowed_location_providers);
+//        autoSetAllowedLocationProviders = allowed_location_providers;
+//        Intent intent = new Intent( "android.intent.action.ACTION_PROVIDER_CHANGED");
+//        context.sendBroadcast( intent);
+//    }
     
     @Override
     public IBinder onBind(Intent arg0) {

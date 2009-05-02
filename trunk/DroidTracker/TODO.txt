@@ -3,7 +3,7 @@
 *********
 
 
-  -> Removes Auto GPS on
+  -> DONE! Removes Auto GPS on
   -> Add Use Cases in doc
   -> Possibly, new UI with start page presenting use cases like menus
   -> Take Picture and/or record audio and send by Mail (or publish on Picasa for pictures)

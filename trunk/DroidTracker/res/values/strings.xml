@@ -28,6 +28,19 @@
 	<string name="tracking_request_msg_button_accept">Accept</string>
 	<string name="tracking_request_msg_button_refuse">Refuse</string>
 
+	<string name="prompt_providers_settings_msg_title">DroidTracker Message</string>
+	<string name="prompt_providers_settings_msg_body">To use DroidTracker, you must first turn on a
+		location source in Settings. Go to settings and turn it on now?
+	</string>
+
+	<string name="prompt_providers_settings_one_source_msg_title">DroidTracker Message</string>
+	<string name="prompt_providers_settings_one_source_msg_body">DroidTracker will provide better
+		location information if all location providers are activated. There is
+		currently only one provider activated. Do you want to activate more
+		now?</string>
+	<string name="prompt_providers_settings_one_source_ok_button">Ok</string>
+	<string name="prompt_providers_settings_one_source_no_need_button">Not now</string>
+
 	<string name="tracking_confirmation_text">Send my location to </string>
 	<string name="tracking_period">Sending Period (in minutes):</string>
 	<string name="confirm_tracking">Start Sending</string>
@@ -93,10 +106,12 @@
 	<string name="preferences_display_info_when_sending_summary">If checked, sends a notification with the sent
 		info when sending.</string>
 
-	<string name="preferences_auto_turn_providers_on_label">Auto Turn GPS/Network On</string>
-	<string name="preferences_auto_turn_providers_on_summary">If checked, automatically turn location providers
-		before getting locations and put them back to their original states
-		after that.</string>
+	<string name="preferences_display_settings_if_single_provider_label">Show Providers Settings If One is Missing
+	</string>
+	<string name="preferences_display_settings_if_single_provider_summary">If checked, prompt the user for location
+		providers settings activation if not both providers (network and SMS)
+		are activated, otherwize user will be prompted only when no provider
+		is activated.</string>
 
 	<string name="periodicity_label_every">Every</string>
 	<string name="periodicity_label_minutes">minutes</string>
@@ -105,11 +120,34 @@
 	<string name="tracker_periodicity_suffix">mn</string>
 
 	<string name="about_label">About</string>
-	<string name="about_version">DroidTracker v1.9</string>
+	<string name="about_version">DroidTracker v1.10</string>
 	<string name="about_author">
 		by Olivier Bonal\n
 	</string>
-	<string name="about_text">The aim of this application is to allow you sharing your location as a readable address using SMS. This means even your grandmother who has no computer and no smartphone but an old SMS capable mobile can know where you are! ;-)\nAny contact that you allow can send a request SMS to your phone containing some specific keywords that you define. When the phone receives the SMS, it will ask for your confirmation (if you set this as a preference) and then automatically start tracking your position and sending it back to the person who has requested it as a readable address (with a link to a Google Map centered on your location). This is done one time or periodically according to his/her choice (i.e. the keywords used in their SMS).\nYou can also trigger the sending yourself from the application to any of your allowed contacts. This lets you choose to send your position once or periodically and even include an option to send your position by mail or by Twitter (if Twidroid is installed).\nA lost/stolen phone mode now allows you configuring a secret start pass-phrase that will trigger a location sending with no confirmation request or notification even when sent by a non authorized contact which means it can be sent from any phone. This is usefull to find your phone back if it is lost or stolen. As with the standard start pass phrase, the location can be sent once or periodically (if the SMS also contains the period pass-phrase).\n Note that, depending on User Preferences, the application can automatically activate location providers (GPS and network) if needed.\n\nWarning: As you probably guessed, this application can send a large number of SMS and should therefore be used carefully for people with no unlimited SMS plans.
+	<string name="about_text">The aim of this application is to allow you
+		sharing your location as a readable address using SMS. This means even
+		your grandmother who has no computer and no smartphone but an old SMS
+		capable mobile can know where you are! ;-)\nAny contact that you allow
+		can send a request SMS to your phone containing some specific keywords
+		that you define. When the phone receives the SMS, it will ask for your
+		confirmation (if you set this as a preference) and then automatically
+		start tracking your position and sending it back to the person who has
+		requested it as a readable address (with a link to a Google Map
+		centered on your location). This is done one time or periodically
+		according to his/her choice (i.e. the keywords used in their
+		SMS).\nYou can also trigger the sending yourself from the application
+		to any of your allowed contacts. This lets you choose to send your
+		position once or periodically and even include an option to send your
+		position by mail or by Twitter (if Twidroid is installed).\nA
+		lost/stolen phone mode now allows you configuring a secret start
+		pass-phrase that will trigger a location sending with no confirmation
+		request or notification even when sent by a non authorized contact
+		which means it can be sent from any phone. This is usefull to find
+		your phone back if it is lost or stolen. As with the standard start
+		pass phrase, the location can be sent once or periodically (if the SMS
+		also contains the period pass-phrase).\n\nWarning: As you probably
+		guessed, this application can send a large number of SMS and should
+		therefore be used carefully for people with no unlimited SMS plans.
 	</string>
 	<string name="about_footer">\n\nMost icons by Axialis Team:
 		http://www.axialis.com/free/icons</string>
@@ -227,12 +265,14 @@
 		mode and configure the associated pass-phrase
 		from the application
 		preferences page.\n\n
-		<b>Location Providers (GPS/Network) Auto Activation</b>
-		\nSince version 1.8, the Location Providers (GPS and Network) can be
-		activated automatically (if they were disabled) at the time the
-		application needs them. This of course will only happen if the user
-		chose this option in the preferences page using the \"Auto Turn
-		GPS/Network On\" checkbox.\n<b>WARNING:</b> Due to a new Google policy, auto changing some settings in the background will become impossible in next Android version (1.5 aka cupcake). In next version of DroidTracker, this feature will then be replaced by a lighter one prompting the location providers settings page instead of changing them automatically. \n\n <b>Twitter Integration</b> \nWhen Twidroid (most popular Android Twitter client) is installed on your phone, Droidtracker interacts with it and adds Twitter on top of the list of allowed contacts. This allows you clicking on it to publish your current location to your Twitter page. As for sending your location by mail, publishing your location on twitter cannot be done periodically as it is requesting a sending confirmation from the user and therefore cannot be performed in the background.\n
+		<b>Twitter Integration</b>
+		\nWhen Twidroid (most popular Android Twitter client) is installed on
+		your phone, Droidtracker interacts with it and adds Twitter on top of
+		the list of allowed contacts. This allows you clicking on it to
+		publish your current location to your Twitter page. As for sending
+		your location by mail, publishing your location on twitter cannot be
+		done periodically as it is requesting a sending confirmation from the
+		user and therefore cannot be performed in the background.\n
 	</string>
 
 	<string name="faq_label">FAQ</string>
@@ -241,8 +281,36 @@
 		\n\n
 	</string>
 	<string name="faq_text">
-		<b>Sometimes, the location sent is not very accurate, why? </b> \nThere are 2 locations providers: network and GPS.\nGPS is the accurate one but it uses satelites and needs a clear vision of the sky to work.\nNetwork locates you using the position of the GSM cells or WiFi Hot Spots that it detects near you so, depending where you are, it sometimes only gives a rough idea of the area where you are. Network however works even indoors. In the message that the tracker will receive, the source of the location (network or gps) will be shown.\n\n <b>Why does it sometimes take a couple of minutes between the request message is sent and the location is received?</b> \nAs explained in previous answer, there are 2 location providers. GPS is the more accurate but takes longer to provide a location than network. If GPS is available (or is off but auto activation is on), the application will wait a couple of minutes for a GPS location. If none is received during that time, it probably means you don't have a good enough GPS signal (indoor for instance) and the application will fall back to sending the network location. The couple of minutes delay is due to this but it allows the tracker to receive a more accurate location. \n\n<b>I cannot see Twitter in my Trackers List, what's wrong?</b>\nTwitter is only available in the list of Trackers if the Twidroid application is installed on your device. All you have to do to see it is then to dowload the Twidroid application from the market and configure it to use your twitter account.\n\n <b>I've read that auto-activating GPS won't be possible with next version of Android (cupcake). How will DroidTracker handle this? </b>\nThat's correct, due to a new Google policy, auto changing some settings in the background will become impossible in next Android version (1.5 aka cupcake). In next version of DroidTracker, this feature will then be replaced by a lighter one prompting the location providers settings page instead of changing them automatically. \n\n
-	</string> 
+		<b>Sometimes, the location sent is not very accurate, why?
+		</b>
+		\nThere are 2 locations providers: network and GPS.\nGPS is the
+		accurate one but it uses satelites and needs a clear vision of the sky
+		to work.\nNetwork locates you using the position of the GSM cells or
+		WiFi Hot Spots that it detects near you so, depending where you are,
+		it sometimes only gives a rough idea of the area where you are.
+		Network however works even indoors. In the message that the tracker
+		will receive, the source of the location (network or gps) will be
+		shown.\n\n
+		<b>Why does it sometimes take a couple of minutes between the
+			request message is sent and the location is received?</b>
+		\nAs explained in previous answer, there are 2 location providers. GPS
+		is the more accurate but takes longer to provide a location than
+		network. If GPS is available (or is off but auto activation is on),
+		the application will wait a couple of minutes for a GPS location. If
+		none is received during that time, it probably means you don't have a good enough GPS signal (indoor for instance) and the application will fall back to sending the network location. The couple of minutes delay is due to this but it allows the tracker to receive a more accurate location. \n\n
+		<b>I cannot see Twitter in my Trackers List, what's wrong?</b>
+		\nTwitter is only available in the list of Trackers if the Twidroid
+		application is installed on your device. All you have to do to see it
+		is then to dowload the Twidroid application from the market and
+		configure it to use your twitter account.\n\n
+		<b>Why has the auto-activating GPS feature disappeared? (I loved
+			that one)</b>
+		\nDue to a new Google policy, auto changing some settings in the
+		background becomes impossible from Android version 1.5 (aka cupcake).
+		From version 1.10 of DroidTracker, this feature is then replaced by a
+		lighter one prompting the location providers settings page instead of
+		changing them automatically.\n\n
+	</string>
 	<string name="mail_subject">My Current Position</string>
 	<string name="chooser_title">Sending Position</string>
 	<string name="location_unknown_msg">Could not determine location.</string>

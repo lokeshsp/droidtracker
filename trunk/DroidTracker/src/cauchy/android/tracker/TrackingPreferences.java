@@ -158,12 +158,12 @@ public class TrackingPreferences extends PreferenceActivity {
         sending_category.addPreference(display_sent_info_pref);
         
         // Auto Turn Network Location Providers On
-        CheckBoxPreference auto_turn_providers_on_pref = new CheckBoxPreference( this);
-        auto_turn_providers_on_pref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON);
-        auto_turn_providers_on_pref.setTitle( R.string.preferences_auto_turn_providers_on_label);
-        auto_turn_providers_on_pref.setDefaultValue( true);
-        auto_turn_providers_on_pref.setSummary( R.string.preferences_auto_turn_providers_on_summary);
-        sending_category.addPreference(auto_turn_providers_on_pref);
+        CheckBoxPreference display_settings_if_single_provider_pref = new CheckBoxPreference( this);
+        display_settings_if_single_provider_pref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER);
+        display_settings_if_single_provider_pref.setTitle( R.string.preferences_display_settings_if_single_provider_label);
+        display_settings_if_single_provider_pref.setDefaultValue( true);
+        display_settings_if_single_provider_pref.setSummary( R.string.preferences_display_settings_if_single_provider_summary);
+        sending_category.addPreference(display_settings_if_single_provider_pref);
         
         return root;
     }

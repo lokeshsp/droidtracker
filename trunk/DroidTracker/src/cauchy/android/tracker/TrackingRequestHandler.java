@@ -24,10 +24,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.telephony.gsm.SmsManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * @author obonal
@@ -36,6 +40,15 @@ public class TrackingRequestHandler extends Activity implements
                                                     IDroidTrackerConstants {
     
     private static final int DIALOG_TRACKING_REQUEST_CONFIRMATION = 0;
+    private static final int DIALOG_LOCATION_PROVIDERS_SETTINGS_CONFIRMATION = 1;
+    private static final int DIALOG_LOCATION_PROVIDERS_SETTINGS_SINGLE_PROVIDER_CONFIRMATION = 2;
+    
+    private SharedPreferences mPrefs;
+    
+    private long selectedTrackerId = -1;
+    private long selectedTrackerPeriod;
+    private String selectedTrackerFormat;
+    private boolean isLostPhoneTracking;
     
     @Override
     protected void onCreate(Bundle icicle) {
@@ -49,6 +62,14 @@ public class TrackingRequestHandler extends Activity implements
             finish();
         }
         
+        mPrefs = getSharedPreferences( "TrackingRequestHandlerPrefs",
+                                       MODE_PRIVATE);
+        selectedTrackerId = mPrefs.getLong( "selectedTrackerId", -1);
+        selectedTrackerPeriod = mPrefs.getLong( "selectedTrackerPeriod", -1);
+        selectedTrackerFormat = mPrefs.getString( "selectedTrackerFormat",
+                                                  IDroidTrackerConstants.FORMAT_SMS);
+        isLostPhoneTracking = mPrefs.getBoolean( "isLostPhoneTracking", false);
+        
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences( this);
         boolean confirmation_requested = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_TRACKING_CONFIRMATION_REQUESTED,
                                                            true);
@@ -56,14 +77,16 @@ public class TrackingRequestHandler extends Activity implements
         Bundle extras = getIntent().getExtras();
         final long tracker_id = extras.getLong( KEY_TRACKER_ID);
         final String msg_to = extras.getString( KEY_MSG_TO);
-        final String msg_display_to = extras.getString( KEY_MSG_DISPLAY_TO);
-        final String msg_body_lowercased = extras.getString( KEY_MSG_BODY)
-                                                 .toLowerCase();
+        // final String msg_display_to = extras.getString( KEY_MSG_DISPLAY_TO);
+        final String msg_body_lowercased = ( extras.getString( KEY_MSG_BODY) == null) ? null
+                : extras.getString( KEY_MSG_BODY).toLowerCase();
         
         final TrackersDataManager dataManager = new TrackersDataManager( this);
         final Tracker tracker = dataManager.fetchTrackerById( tracker_id);
         
         final boolean is_lost_phone_tracking = extras.getBoolean( IDroidTrackerConstants.KEY_LOSTPHONE_TRACKING);
+        
+        final boolean is_manual_start = extras.getBoolean( IDroidTrackerConstants.KEY_IS_MANUAL_START);
         
         String sms_stop_passphrase = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_SMS_STOP_PASSPHRASE,
                                                       getString( R.string.preferences_sms_stop_passphrase_default));
@@ -71,91 +94,155 @@ public class TrackingRequestHandler extends Activity implements
             Log.d( IDroidTrackerConstants.CAUCHY_LOG,
                    "Request from already tracking tracker, look for stop passphase: "
                            + sms_stop_passphrase);
-            if ( msg_body_lowercased.contains( sms_stop_passphrase.toLowerCase())) {
+            if ( msg_body_lowercased != null
+                    && msg_body_lowercased.contains( sms_stop_passphrase.toLowerCase())) {
                 dataManager.stopTracking( tracker_id);
             }
             dataManager.close();
             finish();
         } else {
             dataManager.close();
-            // If tracker is not tracking anymore but the sentence we receive
-            // contains the stop pass phrase, we don't want to start tracking
-            // as it is a stop message.
-            if ( msg_body_lowercased.contains( sms_stop_passphrase.toLowerCase())) {
-                finish();
-            }
-            if ( confirmation_requested && !is_lost_phone_tracking) {
-                showDialog( DIALOG_TRACKING_REQUEST_CONFIRMATION);
+            
+            if ( is_manual_start) {
+                long ms_period = extras.getLong( KEY_PERIOD);
+                String format = extras.getString( KEY_FORMAT);
+                startSendingTrackingInfo( tracker_id,
+                                          msg_to,
+                                          ms_period,
+                                          format,
+                                          is_lost_phone_tracking);
             } else {
-                startTrackingMessageHandling( tracker_id,
-                                              msg_to,
-                                              msg_display_to,
-                                              msg_body_lowercased,
-                                              tracker,
-                                              is_lost_phone_tracking);
-                
+                // If tracker is not tracking anymore but the sentence we
+                // receive
+                // contains the stop pass phrase, we don't want to start
+                // tracking
+                // as it is a stop message.
+                if ( msg_body_lowercased != null
+                        && msg_body_lowercased.contains( sms_stop_passphrase.toLowerCase())) {
+                    finish();
+                }
+                if ( confirmation_requested && !is_lost_phone_tracking) {
+                    showDialog( DIALOG_TRACKING_REQUEST_CONFIRMATION);
+                } else {
+                    startTrackingMessageHandling( tracker_id, msg_to,
+                    // msg_display_to,
+                                                  msg_body_lowercased,
+                                                  tracker,
+                                                  is_lost_phone_tracking);
+                    
+                }
             }
         }
     }
     
     @Override
     protected Dialog onCreateDialog(int id) {
-        Bundle extras = getIntent().getExtras();
-        final long tracker_id = extras.getLong( KEY_TRACKER_ID);
-        final String msg_to = extras.getString( KEY_MSG_TO);
-        final String msg_display_to = extras.getString( KEY_MSG_DISPLAY_TO);
-        final String msg_body_lowercased = extras.getString( KEY_MSG_BODY)
-                                                 .toLowerCase();
-        final TrackersDataManager dataManager = new TrackersDataManager( this);
-        final Tracker tracker = dataManager.fetchTrackerById( tracker_id);
-        dataManager.close();
         
+        final AlertDialog.Builder alert_builder = new AlertDialog.Builder( TrackingRequestHandler.this);
         switch ( id) {
             case DIALOG_TRACKING_REQUEST_CONFIRMATION:
-                return new AlertDialog.Builder( TrackingRequestHandler.this).setIcon( R.drawable.start_tracking)
-                                                                            .setTitle( R.string.tracking_request_msg_title)
-                                                                            .setMessage( getString( R.string.tracking_request_msg_body)
-                                                                                    + " "
-                                                                                    + tracker.name
-                                                                                    + "?")
-                                                                            .setPositiveButton( R.string.tracking_request_msg_button_accept,
-                                                                                                new DialogInterface.OnClickListener() {
-                                                                                                    public void onClick(DialogInterface dialog,
-                                                                                                                        int whichButton) {
-                                                                                                        
-                                                                                                        startTrackingMessageHandling( tracker_id,
-                                                                                                                                      msg_to,
-                                                                                                                                      msg_display_to,
-                                                                                                                                      msg_body_lowercased,
-                                                                                                                                      tracker,
-                                                                                                                                      false);
-                                                                                                        
-                                                                                                    }
-                                                                                                })
-                                                                            .setNegativeButton( R.string.tracking_request_msg_button_refuse,
-                                                                                                new DialogInterface.OnClickListener() {
-                                                                                                    public void onClick(DialogInterface dialog,
-                                                                                                                        int whichButton) {
-                                                                                                        // SmsManager.getDefault().sendTextMessage(
-                                                                                                        // tracker.number,
-                                                                                                        // null,
-                                                                                                        // getText(
-                                                                                                        // R.string.tracking_refused_msg).toString(),
-                                                                                                        // null,
-                                                                                                        // null);
-                                                                                                        setResult( RESULT_CANCELED);
-                                                                                                        finish();
-                                                                                                    }
-                                                                                                })
-                                                                            .create();
+                Bundle extras = getIntent().getExtras();
+                final long tracker_id = extras.getLong( KEY_TRACKER_ID);
+                final String msg_to = extras.getString( KEY_MSG_TO);
+                // final String msg_display_to = extras.getString(
+                // KEY_MSG_DISPLAY_TO);
+                // final String msg_body_lowercased = extras.getString(
+                // KEY_MSG_BODY)
+                // .toLowerCase();
+                final String msg_body_lowercased = ( extras.getString( KEY_MSG_BODY) == null) ? null
+                        : extras.getString( KEY_MSG_BODY).toLowerCase();
+                final TrackersDataManager dataManager = new TrackersDataManager( this);
+                final Tracker tracker = dataManager.fetchTrackerById( tracker_id);
+                dataManager.close();
+                alert_builder.setIcon( R.drawable.icon);
+                alert_builder.setTitle( R.string.tracking_request_msg_title);
+                alert_builder.setMessage( getString( R.string.tracking_request_msg_body)
+                        + " " + tracker.name + "?");
+                alert_builder.setPositiveButton( R.string.tracking_request_msg_button_accept,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         
+                                                         startTrackingMessageHandling( tracker_id,
+                                                                                       msg_to,
+                                                                                       // msg_display_to,
+                                                                                       msg_body_lowercased,
+                                                                                       tracker,
+                                                                                       false);
+                                                         
+                                                     }
+                                                 });
+                alert_builder.setNegativeButton( R.string.tracking_request_msg_button_refuse,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         // SmsManager.getDefault().sendTextMessage(
+                                                         // tracker.number,
+                                                         // null,
+                                                         // getText(
+                                                         // R.string.tracking_refused_msg).toString(),
+                                                         // null,
+                                                         // null);
+                                                         setResult( RESULT_CANCELED);
+                                                         finish();
+                                                     }
+                                                 });
+                return alert_builder.create();
+            case DIALOG_LOCATION_PROVIDERS_SETTINGS_CONFIRMATION:
+                alert_builder.setIcon( R.drawable.icon);
+                alert_builder.setTitle( R.string.prompt_providers_settings_msg_title);
+                alert_builder.setMessage( getString( R.string.prompt_providers_settings_msg_body));
+                alert_builder.setPositiveButton( R.string.tracking_request_msg_button_accept,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         Intent providers_settings_intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                                         providers_settings_intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                         startActivity( providers_settings_intent);
+                                                         doStartSendingLocation();
+                                                     }
+                                                 });
+                alert_builder.setNegativeButton( R.string.tracking_request_msg_button_refuse,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         Toast.makeText( TrackingRequestHandler.this,
+                                                                         "Track cancelled due to a lack of location providers.",
+                                                                         Toast.LENGTH_SHORT);
+                                                         
+                                                         setResult( RESULT_CANCELED);
+                                                         finish();
+                                                     }
+                                                 });
+                return alert_builder.create();
+            case DIALOG_LOCATION_PROVIDERS_SETTINGS_SINGLE_PROVIDER_CONFIRMATION:
+                alert_builder.setIcon( R.drawable.icon);
+                alert_builder.setTitle( R.string.prompt_providers_settings_one_source_msg_title);
+                alert_builder.setMessage( getString( R.string.prompt_providers_settings_one_source_msg_body));
+                alert_builder.setPositiveButton( R.string.prompt_providers_settings_one_source_ok_button,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         Intent providers_settings_intent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                                         providers_settings_intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                         startActivity( providers_settings_intent);
+                                                         doStartSendingLocation();
+                                                     }
+                                                 });
+                alert_builder.setNegativeButton( R.string.prompt_providers_settings_one_source_no_need_button,
+                                                 new DialogInterface.OnClickListener() {
+                                                     public void onClick(DialogInterface dialog,
+                                                                         int whichButton) {
+                                                         doStartSendingLocation();
+                                                     }
+                                                 });
+                return alert_builder.create();
         }
         return super.onCreateDialog( id);
     }
     
-    private void handleMessage(Context context,
-                               long tracker_id,
-                               String msg_to,
-                               String msg_display_to,
+    private void handleMessage(Context context, long tracker_id, String msg_to,
+    // String msg_display_to,
                                String msg_body_lowercased,
                                boolean is_lost_phone_tracking) {
         
@@ -246,8 +333,7 @@ public class TrackingRequestHandler extends Activity implements
             
             // If tracking request comes from SMS, reply is sent by SMS
             // hence the forced format.
-            startSendingTrackingInfo( this,
-                                      tracker_id,
+            startSendingTrackingInfo( tracker_id,
                                       msg_to,
                                       ms_period,
                                       IDroidTrackerConstants.FORMAT_SMS,
@@ -264,73 +350,103 @@ public class TrackingRequestHandler extends Activity implements
      */
     private void startTrackingMessageHandling(final long tracker_id,
                                               final String msg_to,
-                                              final String msg_display_to,
+                                              // final String msg_display_to,
                                               final String msg_body_lowercased,
                                               final Tracker tracker,
                                               final boolean is_lost_phone_tracking) {
-        handleMessage( TrackingRequestHandler.this,
-                       tracker_id,
-                       msg_to,
-                       msg_display_to,
+        handleMessage( TrackingRequestHandler.this, tracker_id, msg_to,
+        // msg_display_to,
                        msg_body_lowercased,
                        is_lost_phone_tracking);
-        setResult( RESULT_OK);
-        finish();
+        // setResult( RESULT_OK);
+        // finish();
     }
     
-    public static void startSendingTrackingInfo(final Activity parent_activity,
-                                                long tracker_id,
-                                                final String to,
-                                                final long ms_period,
-                                                final String format,
-                                                boolean is_lost_phone_tracking) {
-        // //////////////
-//        String active_location_providers = Settings.System.getString( parent_activity.getContentResolver(),
-//                                                                      Settings.System.LOCATION_PROVIDERS_ALLOWED);
-//        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//               "TrackingInfoSenderService.onStart() active_location_providers = "
-//                       + active_location_providers);
-//        if ( active_location_providers == null
-//                || active_location_providers.length() == 0) {
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "                                    No location providers! Activating them! ");
-//            Settings.System.putString( parent_activity.getContentResolver(),
-//                                       Settings.System.LOCATION_PROVIDERS_ALLOWED,
-//                                       "network,gps");
-//            // Intent intent = new
-//            // Intent("android.intent.action.ACTION_PROVIDER_CHANGED");
-//            // parent_activity.sendBroadcast(intent);
-//            LocationManager locationManager = (LocationManager) parent_activity.getSystemService( Context.LOCATION_SERVICE);
-//            try {
-//                Method m = locationManager.getClass()
-//                                          .getMethod( "updateProviders",
-//                                                      new Class[] {});
-//                m.setAccessible( true);
-//                m.invoke( locationManager, new Object[] {});
-//            } catch ( Exception e) {
-//                Log.e( IDroidTrackerConstants.CAUCHY_LOG,
-//                       "Couldn't call updateProviders",
-//                       e);
-//            }
-//        } else {
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "                                    Location providers found! Keeping as is... ");
-//        }
-        // //////////////
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        SharedPreferences.Editor ed = mPrefs.edit();
+        ed.putLong( "selectedTrackerId", selectedTrackerId);
+        ed.putLong( "selectedTrackerPeriod", selectedTrackerPeriod);
+        ed.putString( "selectedTrackerFormat", selectedTrackerFormat);
+        ed.putBoolean( "isLostPhoneTracking", isLostPhoneTracking);
+        
+        ed.commit();
+    }
+    
+    public void startSendingTrackingInfo(long tracker_id,
+                                         final String to,
+                                         final long ms_period,
+                                         final String format,
+                                         boolean is_lost_phone_tracking) {
+        
+        this.selectedTrackerId = tracker_id;
+        this.selectedTrackerPeriod = ms_period;
+        this.selectedTrackerFormat = format;
+        this.isLostPhoneTracking = is_lost_phone_tracking;
+        
+        // Check whether proper location providers are activated
+        String active_location_providers = Settings.System.getString( getContentResolver(),
+                                                                      Settings.System.LOCATION_PROVIDERS_ALLOWED);
+        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+               "startSendingTrackingInfo active_location_providers = ["
+                       + active_location_providers + "]");
+        if ( active_location_providers == null
+                || active_location_providers.trim().length() == 0) {
+            if ( !isLostPhoneTracking) {
+                showDialog( DIALOG_LOCATION_PROVIDERS_SETTINGS_CONFIRMATION);
+            } else {
+                // In lost phone mode, we can't ask for user interaction so
+                // we just have to abort the tracking and warn the sender
+                SmsManager.getDefault()
+                          .sendTextMessage( to,
+                                            null,
+                                            getText( R.string.tracking_refused_msg).toString(),
+                                            null,
+                                            null);
+                setResult( RESULT_CANCELED);
+                finish();
+            }
+        } else {
+            boolean should_promt_user_if_single_provider = PreferenceManager.getDefaultSharedPreferences( this)
+                                                                            .getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER,
+                                                                                         true);
+            if ( isLostPhoneTracking ||
+                 ( active_location_providers.contains( LocationManager.GPS_PROVIDER) &&
+                   active_location_providers.contains( LocationManager.NETWORK_PROVIDER) &&
+                   !should_promt_user_if_single_provider)) {
+                doStartSendingLocation();
+            } else {
+                // If only one source active and settings set to prompt user
+                showDialog( DIALOG_LOCATION_PROVIDERS_SETTINGS_SINGLE_PROVIDER_CONFIRMATION);
+            }
+        }
+    }
+    
+    private void doStartSendingLocation() {
+        
+        final TrackersDataManager dataManager = new TrackersDataManager( TrackingRequestHandler.this);
+        final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
+        
+        final long tracker_id = selectedTracker.id;
+        final String to = selectedTracker.number;
+        final long ms_period = selectedTrackerPeriod;
+        final String format = selectedTrackerFormat;
+        boolean is_lost_phone_tracking = isLostPhoneTracking;
         
         Log.d( CAUCHY_LOG, "startSendingTrackingInfo to " + to + " every "
                 + ms_period + " ms.");
-        final TrackersDataManager dataManager = new TrackersDataManager( parent_activity);
         dataManager.startTracking( tracker_id,
                                    ms_period,
                                    format,
                                    is_lost_phone_tracking);
         dataManager.close();
-        Intent sender_intent = new Intent( parent_activity,
+        Intent sender_intent = new Intent( this,
                                            SendTrackingInfoIntentReceiver.class);
         sender_intent.putExtra( KEY_MSG_TO, to);
         
-        PendingIntent send_alarm_intent = PendingIntent.getBroadcast( parent_activity,
+        PendingIntent send_alarm_intent = PendingIntent.getBroadcast( this,
                                                                       0,
                                                                       sender_intent,
                                                                       PendingIntent.FLAG_CANCEL_CURRENT);
@@ -338,13 +454,14 @@ public class TrackingRequestHandler extends Activity implements
         long firstTime = SystemClock.elapsedRealtime();
         
         // Schedule the alarm!
-        AlarmManager am = (AlarmManager) parent_activity.getSystemService( ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) this.getSystemService( ALARM_SERVICE);
         
         am.setRepeating( AlarmManager.ELAPSED_REALTIME_WAKEUP,
                          firstTime,
                          IDroidTrackerConstants.TRACKING_CHECK_PERIOD_MS,// ms_period,
                          send_alarm_intent);
-        
+        setResult( RESULT_OK);
+        finish();
     }
     
 }
