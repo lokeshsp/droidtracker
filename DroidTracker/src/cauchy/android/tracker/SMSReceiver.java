@@ -65,7 +65,7 @@ public class SMSReceiver extends BroadcastReceiver {
             }
             
             final String msg_to = msg.getOriginatingAddress();
-            final String msg_display_to = msg.getDisplayOriginatingAddress();
+//            final String msg_display_to = msg.getDisplayOriginatingAddress();
             
             TrackersDataManager dataManager = new TrackersDataManager( context);
             Tracker tracker = dataManager.fetchTrackerByNumberUsingCallerIDMinMatch( msg_to);
@@ -98,8 +98,8 @@ public class SMSReceiver extends BroadcastReceiver {
                                    context,
                                    TrackingRequestHandler.class);
             i.putExtra( IDroidTrackerConstants.KEY_MSG_TO, msg_to);
-            i.putExtra( IDroidTrackerConstants.KEY_MSG_DISPLAY_TO,
-                        msg_display_to);
+//            i.putExtra( IDroidTrackerConstants.KEY_MSG_DISPLAY_TO,
+//                        msg_display_to);
             i.putExtra( IDroidTrackerConstants.KEY_MSG_BODY, msg_body);
             i.putExtra( IDroidTrackerConstants.KEY_TRACKER_ID, tracker.id);
             i.putExtra( IDroidTrackerConstants.KEY_LOSTPHONE_TRACKING,

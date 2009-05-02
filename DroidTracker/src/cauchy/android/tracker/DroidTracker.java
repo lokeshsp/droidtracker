@@ -43,7 +43,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -77,8 +76,8 @@ public class DroidTracker extends ListActivity implements
         
         ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>( this,
                                                                          android.R.layout.simple_spinner_item);
-        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
+        spinner_adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+        
         spinner_adapter.add( getString( R.string.all_trackers_label));
         spinner_adapter.add( getString( R.string.tracking_only_label));
         spinner.setAdapter( spinner_adapter);
@@ -343,13 +342,18 @@ public class DroidTracker extends ListActivity implements
                                                 switch ( which) {
                                                     case 0:
                                                         if ( selectedTracker != null) {
-                                                            TrackingRequestHandler.startSendingTrackingInfo( DroidTracker.this,
-                                                                                                             selectedTracker.id,
-                                                                                                             selectedTracker.number,
-                                                                                                             -1,
-                                                                                                             IDroidTrackerConstants.FORMAT_TWITTER,
-                                                                                                             false);
-                                                            fillTrackersList();
+                                                            // TrackingRequestHandler.startSendingTrackingInfo(
+                                                            // DroidTracker.this,
+                                                            // selectedTracker.id,
+                                                            // selectedTracker.number,
+                                                            // -1,
+                                                            // IDroidTrackerConstants.FORMAT_TWITTER,
+                                                            // false);
+                                                            startSendingTrackingInfo( selectedTracker.id,
+                                                                                      selectedTracker.number,
+                                                                                      -1,
+                                                                                      IDroidTrackerConstants.FORMAT_TWITTER,
+                                                                                      false);
                                                         }
                                                         break;
                                                     default:
@@ -498,13 +502,11 @@ public class DroidTracker extends ListActivity implements
                                                          
                                                          final Tracker selectedTracker = dataManager.fetchTrackerById( selectedTrackerId);
                                                          if ( selectedTracker != null) {
-                                                             TrackingRequestHandler.startSendingTrackingInfo( DroidTracker.this,
-                                                                                                              selectedTracker.id,
-                                                                                                              selectedTracker.number,
-                                                                                                              ms_period,
-                                                                                                              tracking_format,
-                                                                                                              false);
-                                                             fillTrackersList();
+                                                             startSendingTrackingInfo( selectedTracker.id,
+                                                                                       selectedTracker.number,
+                                                                                       ms_period,
+                                                                                       tracking_format,
+                                                                                       false);
                                                          }
                                                      }
                                                  });
@@ -545,6 +547,32 @@ public class DroidTracker extends ListActivity implements
         } else {
             return getString( R.string.idle_tracker_dialog_title_default_tracker_name);
         }
+    }
+    
+    private void startSendingTrackingInfo(long id,
+                                          String number,
+                                          long ms_period,
+                                          String format,
+                                          boolean b) {
+        Intent i = new Intent( IDroidTrackerConstants.HANDLE_SMS_ACTION,
+                               null,
+                               getApplicationContext(),
+                               TrackingRequestHandler.class);
+        // i.putExtra( IDroidTrackerConstants.KEY_MSG_TO, msg_to);
+        i.putExtra( IDroidTrackerConstants.KEY_MSG_DISPLAY_TO, number);
+        // i.putExtra( IDroidTrackerConstants.KEY_MSG_BODY, msg_body);
+        i.putExtra( IDroidTrackerConstants.KEY_TRACKER_ID, id);
+        i.putExtra( IDroidTrackerConstants.KEY_LOSTPHONE_TRACKING, false);
+        i.putExtra( IDroidTrackerConstants.KEY_IS_MANUAL_START, true);
+        i.putExtra( IDroidTrackerConstants.KEY_PERIOD, ms_period);
+        i.putExtra( IDroidTrackerConstants.KEY_FORMAT, format);
+        
+        // i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity( i);
+        
+        // TODO start with result and do the fill on result
+        fillTrackersList();
+        
     }
     
     @Override

@@ -25,8 +25,10 @@ public interface IDroidTrackerConstants {
     public static final String KEY_MSG_DISPLAY_TO = "msg_display_to";
     public static final String KEY_MSG_BODY = "msg_body";
     public static final String KEY_TRACKER_ID = "tracker_id";
-    public static final String KEY_PERIOD = "MS_PERIOD";
     public static final String KEY_LOSTPHONE_TRACKING = "lostphone_tracking";
+    public static final String KEY_IS_MANUAL_START = "manual_start";
+    public static final String KEY_PERIOD = "tracking_period";
+    public static final String KEY_FORMAT = "tracking_format";
 
     public static final String KEY_NOTIFICATION_TITLE = "KEY_NOTIFICATION_TITLE";
     public static final String KEY_NOTIFICATION_MSG = "KEY_NOTIFICATION_MSG";
@@ -52,15 +54,18 @@ public interface IDroidTrackerConstants {
     public static final String PREFERENCE_KEY_TRACKING_CONFIRMATION_REQUESTED = "PREFERENCE_KEY_TRACKING_CONFIRMATION_REQUESTED";
     public static final String PREFERENCE_KEY_DISPLAY_SENT_INFO = "PREFERENCE_KEY_DISPLAY_SENT_INFO";
     public static final String PREFERENCE_KEY_SMS_PERIOD_PASSPHRASE = "PREFERENCE_KEY_SMS_PERIOD_PASSPHRASE";
-    public static final String PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON = "PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON";
+    public static final String PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER = "PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER";
     public static final String PERIOD_PASSPHRASE_SEPARATOR = " {x} ";
 
     public static final int SENT_NOTIFICATION_ID = 0;
+    
 
     public static final String ABOUT_TAG = "ABOUT_TAG";
     public static final String HELP_TAG = "HELP_TAG";
     public static final String FAQ_TAG = "FAQ_TAG";
 
     public static final String TWITTER_TRACKER_NAME = "Twitter";
+
+
     
 }
