@@ -55,11 +55,13 @@ public class DroidTracker extends ListActivity implements
     private static final int MENU_ABOUT = MENU_SETTINGS + 1;
     
     private static final int PICK_CONTACT_REQUEST = 0;
+    private static final int CREATE_AND_PICK_CONTACT_REQUEST = 1;
     
     private static final int DIALOG_STOP_TRACKING = 0;
     private static final int DIALOG_IDLE_TRACKER_MENU = 1;
     private static final int DIALOG_IDLE_TWITTER_TRACKER_MENU = 2;
     private static final int DIALOG_START_TRACKING = 3;
+    private static final int DIALOG_NEW_TRACKER = 4;
     
     private boolean showTrackingOnlyMode = false;
     
@@ -248,9 +250,10 @@ public class DroidTracker extends ListActivity implements
         // changed from removed item.getId()
         switch ( item.getItemId()) {
             case MENU_NEW_TRACKER_ID:
-                Intent i = new Intent( Intent.ACTION_PICK,
-                                       Uri.parse( "content://contacts/people/"));
-                startActivityForResult( i, PICK_CONTACT_REQUEST);
+                showDialog( DIALOG_NEW_TRACKER);
+//                Intent i = new Intent( Intent.ACTION_PICK,
+//                                       Uri.parse( "content://contacts/people/"));
+//                startActivityForResult( i, PICK_CONTACT_REQUEST);
                 break;
             case MENU_STOP_ALL_TRACKING_ID:
                 if ( selected_tracker != null) {
@@ -521,6 +524,31 @@ public class DroidTracker extends ListActivity implements
                                                      }
                                                  });
                 return alert_builder.create();
+            case DIALOG_NEW_TRACKER:
+                alert_builder.setTitle( getText( R.string.new_tracker_menu));
+                alert_builder.setItems( R.array.new_tracker_menu_options,
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,
+                                                                int which) {
+                                                
+                                                switch ( which) {
+                                                    case 0:
+                                                        Intent i = new Intent( Intent.ACTION_PICK,
+                                                                             Uri.parse( "content://contacts/people/"));
+                                                        startActivityForResult( i, PICK_CONTACT_REQUEST);
+                                                        break;
+                                                    case 1:
+                                                        Intent add_contact_intent = new Intent( Contacts.Intents.Insert.ACTION,
+                                                                                                Uri.parse( "content://contacts/people/"));
+                                                        startActivityForResult( add_contact_intent, CREATE_AND_PICK_CONTACT_REQUEST);
+                                                        // TODO: Show Contact Creation Dialog
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+                                        });
+                return alert_builder.create();
         }
         return null;
     }
@@ -618,68 +646,83 @@ public class DroidTracker extends ListActivity implements
         if ( requestCode == PICK_CONTACT_REQUEST) {
             if ( resultCode == RESULT_OK) {
                 // Log.d( CAUCHY_LOG, "Contact Picked data   : " + data);
-                
-                // Request the selected record.
-                String[] projection = new String[] {
-                        android.provider.BaseColumns._ID,
-                        android.provider.Contacts.PeopleColumns.NAME,
-                        android.provider.Contacts.PhonesColumns.NUMBER };
-                
-                Cursor cur;
-                cur = managedQuery( Uri.parse( source_intent.getDataString()),
-                                    projection, // Which columns to return.
-                                    null,
-                                    null, // WHERE clause.
-                                    People.NAME + " ASC"); // Sort order.
-                
-                Log.d( CAUCHY_LOG, "Query Contact result URI =  "
-                        + Uri.parse( source_intent.getDataString()));
-                
-                // Log.d( CAUCHY_LOG, "Query Contact, # of results: " +
-                // cur.count());
-                
-                int id_col = cur.getColumnIndex( android.provider.BaseColumns._ID);
-                int name_col = cur.getColumnIndex( android.provider.Contacts.PeopleColumns.NAME);
-                int number_col = cur.getColumnIndex( android.provider.Contacts.PhonesColumns.NUMBER);
-                
-                while ( cur.moveToNext()) {
-                    long tracker_id = cur.getLong( id_col);
-                    String tracker_name = cur.getString( name_col);
-                    String tracker_number = cur.getString( number_col);
-                    Uri mContacts = Contacts.ContactMethods.CONTENT_URI;
-                    
-                    String[] mail_projection = new String[] {
-                            Contacts.ContactMethods.PERSON_ID,
-                            Contacts.ContactMethods.KIND,
-                            Contacts.ContactMethods.DATA };
-                    
-                    Cursor c = this.managedQuery( mContacts,
-                                                  mail_projection,
-                                                  Contacts.ContactMethods.PERSON_ID
-                                                          + "=\'"
-                                                          + tracker_id
-                                                          + "\'",
-                                                  null,
-                                                  Contacts.ContactMethods.PERSON_ID
-                                                          + " ASC");
-                    int email_col = c.getColumnIndex( Contacts.ContactMethods.DATA);
-                    c.moveToFirst();
-                    String tracker_email;
-                    try {
-                        tracker_email = c.getString( email_col);
-                    } catch ( Exception e) {
-                        tracker_email = "";
-                    }
-                    
-                    dataManager.addTracker( tracker_id,
-                                            tracker_name,
-                                            tracker_number,
-                                            tracker_email);
-                }
-                
+                addTrackerFromContactIntentResult( source_intent);
                 fillTrackersList();
             }
+        } else if ( requestCode == CREATE_AND_PICK_CONTACT_REQUEST) {
+            if ( resultCode == RESULT_OK) {
+                //Log.d( IDroidTrackerConstants.CAUCHY_LOG," contact = " + source_intent.getDataString());
+                addTrackerFromContactIntentResult( source_intent);
+                fillTrackersList();
+            } else {
+                Log.d( IDroidTrackerConstants.CAUCHY_LOG," Contact Creation Cancelled!");
+            }
         }
+    }
+
+    private void addTrackerFromContactIntentResult(Intent source_intent) {
+        // Request the selected record.
+        String[] projection = new String[] {
+                android.provider.BaseColumns._ID,
+                android.provider.Contacts.PeopleColumns.NAME,
+                android.provider.Contacts.PhonesColumns.NUMBER };
+        
+        Cursor cur;
+        cur = managedQuery( Uri.parse( source_intent.getDataString()),
+                            projection, // Which columns to return.
+                            null,
+                            null, // WHERE clause.
+                            People.NAME + " ASC"); // Sort order.
+        
+        Log.d( CAUCHY_LOG, "Query Contact result URI =  "
+                + Uri.parse( source_intent.getDataString()));
+        
+        // Log.d( CAUCHY_LOG, "Query Contact, # of results: " +
+        // cur.count());
+        
+        int id_col = cur.getColumnIndex( android.provider.BaseColumns._ID);
+        int name_col = cur.getColumnIndex( android.provider.Contacts.PeopleColumns.NAME);
+        int number_col = cur.getColumnIndex( android.provider.Contacts.PhonesColumns.NUMBER);
+        
+        while ( cur.moveToNext()) {
+            long tracker_id = cur.getLong( id_col);
+            String tracker_name = cur.getString( name_col);
+            String tracker_number = cur.getString( number_col);
+            String tracker_email = getContactEmail( tracker_id);
+            
+            dataManager.addTracker( tracker_id,
+                                    tracker_name,
+                                    tracker_number,
+                                    tracker_email);
+        }
+    }
+
+    private String getContactEmail(long tracker_id) {
+        Uri mContacts = Contacts.ContactMethods.CONTENT_URI;
+        
+        String[] mail_projection = new String[] {
+                Contacts.ContactMethods.PERSON_ID,
+                Contacts.ContactMethods.KIND,
+                Contacts.ContactMethods.DATA };
+        
+        Cursor c = this.managedQuery( mContacts,
+                                      mail_projection,
+                                      Contacts.ContactMethods.PERSON_ID
+                                              + "=\'"
+                                              + tracker_id
+                                              + "\'",
+                                      null,
+                                      Contacts.ContactMethods.PERSON_ID
+                                              + " ASC");
+        int email_col = c.getColumnIndex( Contacts.ContactMethods.DATA);
+        c.moveToFirst();
+        String tracker_email;
+        try {
+            tracker_email = c.getString( email_col);
+        } catch ( Exception e) {
+            tracker_email = "";
+        }
+        return tracker_email;
     }
     
     public void updateTrackerFromID(long id) {

@@ -9,6 +9,7 @@
 			android:text="@string/faq_header" />
 		<TextView android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:gravity="left"
+			android:autoLink="all"
 			android:text="@string/faq_text" />
 	</LinearLayout>
 </ScrollView>
