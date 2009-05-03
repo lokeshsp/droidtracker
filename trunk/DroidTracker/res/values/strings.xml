@@ -6,9 +6,8 @@
 	<string name="no_trackers">No one!</string>
 	<string name="all_trackers_label">All Contacts with Permission</string>
 	<string name="tracking_only_label">People Currently Tracking You</string>
-	<string name="new_tracker_menu">Grant Permission</string>
+	<string name="new_tracker_menu">Add Tracker</string>
 	<string name="remove_tracker_menu">Remove Permission</string>
-	<string name="start_tracking_menu">Start Sending Info</string>
 	<string name="stop_tracking_menu">Stop All Tracking</string>
 	<string name="settings_menu">Preferences</string>
 	<string name="about_menu">About/Help</string>
@@ -102,9 +101,9 @@
 		tracking request by SMS.</string>
 
 	<string name="preferences_sending_category_label">Sending Preferences</string>
-	<string name="preferences_display_info_when_sending_label">Notify When Sending Info</string>
+	<string name="preferences_display_info_when_sending_label">Notify When Sending Location</string>
 	<string name="preferences_display_info_when_sending_summary">If checked, sends a notification with the sent
-		info when sending.</string>
+		message when sending.</string>
 
 	<string name="preferences_display_settings_if_single_provider_label">Show Providers Settings If One is Missing
 	</string>
@@ -162,19 +161,19 @@
 		\nThe Welcome Screen of this application is the list of trackers, i.e
 		of people from your phone contacts that you allow requesting and being
 		sent your location. On first run, this list will be empty. To add a
-		new tracker, use the \"Grant Permission\" menu to chose a new allowed
+		new tracker, use the \"Add Tracker\" menu to chose a new allowed
 		tracker from your contacts.\nThe top spinner let you change the
 		display to view only people currently tracking you. However, even in
 		the default mode, people tracking you will be shown.\nWarning: When
-		adding a new tracker, part of this contact''s information is copied to
-		the tracker''s database. If the contact information changes (number
+		adding a new tracker, part of this contact\'s information is copied to
+		the tracker\'s database. If the contact information changes (number
 		changed, mail address added...), please make sure to update the
-		tracker''s data simply by pressing on the contact''s name and choosing
+		tracker\'s data simply by pressing on the contact\'s name and choosing
 		\"Refresh Contact Data\" from the menu.\n
 		You can of course remove
 		tracking permission from any of your contacts.
 		This is done by simply
-		pressing on the tracker''s name in the tracker''s list and then
+		pressing on the tracker\'s name in the tracker\'s list and then
 		choosing
 		the proper option in the contextual menu.\n\n
 		<b>Start Tracking (initiated by the tracker)</b>
@@ -208,7 +207,7 @@
 		\nYou can decide to
 		start sending your location yourself. This is done
 		by simply pressing
-		on the tracker''s name in the tracker''s list. This
+		on the tracker\'s name in the tracker\'s list. This
 		will prompt with a
 		contextual menu for this tracker in which you will
 		chose \"Start
@@ -235,7 +234,7 @@
 		be defined in the application Preferences page (default
 		is \"stop\").\n\n
 		<b>Stop Tracking (initiated by yourself)</b>
-		\nThis is done very easily by simply pressing on the tracker''s name
+		\nThis is done very easily by simply pressing on the tracker\'s name
 		in
 		the list of trackers. This will prompt you with a contextual menu
 		in
@@ -273,6 +272,8 @@
 		your location by mail, publishing your location on twitter cannot be
 		done periodically as it is requesting a sending confirmation from the
 		user and therefore cannot be performed in the background.\n
+		Click Here to Install Twidroid:\n
+		http://market.android.com/search?q=pname:com.twidroid\n
 	</string>
 
 	<string name="faq_label">FAQ</string>
@@ -297,12 +298,12 @@
 		is the more accurate but takes longer to provide a location than
 		network. If GPS is available (or is off but auto activation is on),
 		the application will wait a couple of minutes for a GPS location. If
-		none is received during that time, it probably means you don't have a good enough GPS signal (indoor for instance) and the application will fall back to sending the network location. The couple of minutes delay is due to this but it allows the tracker to receive a more accurate location. \n\n
-		<b>I cannot see Twitter in my Trackers List, what's wrong?</b>
+		none is received during that time, it probably means you don\'t have a good enough GPS signal (indoor for instance) and the application will fall back to sending the network location. The couple of minutes delay is due to this but it allows the tracker to receive a more accurate location. \n\n
+		<b>I cannot see Twitter in my Trackers List, what\'s wrong?</b>
 		\nTwitter is only available in the list of Trackers if the Twidroid
 		application is installed on your device. All you have to do to see it
 		is then to dowload the Twidroid application from the market and
-		configure it to use your twitter account.\n\n
+		configure it to use your twitter account.\nClick Here to Install Twidroid:\n http://market.android.com/search?q=pname:com.twidroid\n\n
 		<b>Why has the auto-activating GPS feature disappeared? (I loved
 			that one)</b>
 		\nDue to a new Google policy, auto changing some settings in the
