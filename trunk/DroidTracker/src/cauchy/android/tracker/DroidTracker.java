@@ -108,7 +108,7 @@ public class DroidTracker extends ListActivity implements
         };
         spinner.setOnItemSelectedListener( l);
         
-        mPrefs = getSharedPreferences( "DroidTrackerPrefs", MODE_PRIVATE);
+        mPrefs = getSharedPreferences( IDroidTrackerConstants.SHARED_PREFERENCES_KEY_MAIN, MODE_PRIVATE);
         selectedTrackerId = mPrefs.getLong( "selectedTrackerId", -1);
     }
     

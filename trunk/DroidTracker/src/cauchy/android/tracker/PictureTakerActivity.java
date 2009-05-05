@@ -1,11 +1,14 @@
 package cauchy.android.tracker;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -18,29 +21,16 @@ import android.view.View;
 import android.view.Window;
 
 /**
- * Takes a picture, upload it to Picasa, then close.
- * To be called like this:
- *       Intent i = new Intent( this, TakeAndPicasaPublishPictureActivity.class);
- *       i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_LOGIN, username);
- *       i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_PASSWORD, passwd);
- *       i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_DEST_ALBUM_NAME, albumname);
- *       startActivity( i);
- * 
+ * Takes a picture, upload it to Picasa, then close. To be called like this:
  * @author olivier
  * 
  */
-public class TakeAndPicasaPublishPictureActivity extends Activity {
+public class PictureTakerActivity extends Activity {
     
     private static final String LOG_TAG = "[CAUCHY_LOG]";
     
-    public static final String KEY_PICASA_LOGIN = "PICASA_LOGIN";
-    public static final String KEY_PICASA_PASSWORD = "PICASA_PASSWORD";
-    public static final String KEY_PICASA_DEST_ALBUM_NAME = "PICASA_DEST_ALBUM_NAME";
-    
     private View mPreview;
-    private String picasaLogin;
-    private String picasaPasswd;
-    private String picasaDestinationAlbumName;
+    private SharedPreferences mPrefs;
     
     private PictureCallback pic_callback = new Camera.PictureCallback() {
         
@@ -53,25 +43,27 @@ public class TakeAndPicasaPublishPictureActivity extends Activity {
                                                               0,
                                                               data.length);
                 try {
-                    final PicasaWSUtils pws = new PicasaWSUtils( picasaLogin,
-                                                                 picasaPasswd);
-                    ByteArrayOutputStream buf = new ByteArrayOutputStream();
+                    String picture_path = getApplication().getFilesDir()
+                                                          .getAbsolutePath()
+                            + IDroidTrackerConstants.TMP_PICTURE_FILE_NAME;
+                    
+                    File f = new File( picture_path);
+                    if ( f.exists()) {
+                        f.delete();
+                    }
+                    FileOutputStream buf = new FileOutputStream( picture_path);
+                    
                     myPic.compress( Bitmap.CompressFormat.JPEG, 70, buf);
                     
-                    final byte[] jpegByteArray = buf.toByteArray();
-                    buf.close();
-                    camera.stopPreview();
-                    
-                    Runnable picasa_updater = new Runnable() {
-                        public void run() {
-                            pws.addPicture( jpegByteArray,
-                                            picasaDestinationAlbumName);
-                            setResult( RESULT_OK);
-                            finish();
-                        }
-                    };
-                    Thread picasa_updater_thread = new Thread( picasa_updater);
-                    picasa_updater_thread.start();
+                    SharedPreferences.Editor ed = mPrefs.edit();
+                    ed.putBoolean( IDroidTrackerConstants.PICTURE_TO_UPLOAD,
+                                   true);
+                    ed.commit();
+                    Intent sender_intent = new Intent( getApplicationContext(),
+                                                       PictureUploaderService.class);
+                    getApplicationContext().startService( sender_intent);
+                    setResult( RESULT_OK);
+                    finish();
                 } catch ( Exception e) {
                     e.printStackTrace();
                     setResult( RESULT_CANCELED);
@@ -87,18 +79,17 @@ public class TakeAndPicasaPublishPictureActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
         
+        Log.d( LOG_TAG, "PictureTaker onCreate!");
+        
         // Hide the window title.
         requestWindowFeature( Window.FEATURE_NO_TITLE);
+        
+        mPrefs = getSharedPreferences( IDroidTrackerConstants.SHARED_PREFERENCES_KEY_MAIN,
+                                       MODE_PRIVATE);
         
         // Create our Preview view and set it as the content of our activity.
         mPreview = new Preview( this);
         setContentView( mPreview);
-        
-        Bundle extras = getIntent().getExtras();
-        picasaLogin = extras.getString( KEY_PICASA_LOGIN);
-        picasaPasswd = extras.getString( KEY_PICASA_PASSWORD);
-        picasaDestinationAlbumName = extras.getString( KEY_PICASA_DEST_ALBUM_NAME);
-        
     }
     
     private class Preview extends SurfaceView implements SurfaceHolder.Callback {
@@ -151,7 +142,7 @@ public class TakeAndPicasaPublishPictureActivity extends Activity {
             mCamera.setParameters( parameters);
             mCamera.startPreview();
             
-            // Wait 1s and take a picture
+            // Wait 2s and take a picture
             Timer t = new Timer();
             t.schedule( new TimerTask() {
                 
@@ -159,7 +150,7 @@ public class TakeAndPicasaPublishPictureActivity extends Activity {
                 public void run() {
                     mCamera.takePicture( null, null, pic_callback);
                 }
-            }, 1000);
+            }, 2000);
         }
         
     }
