@@ -82,6 +82,7 @@
 	<string name="lostphone_mode_label">Mode Tél volé ou perdu</string>
 	<string name="lostphone_mode_summary">Configure l\'activation du mode téléphone
 		volé/perdu et la phrase declancheuse.</string>
+    <string name="lostphone_mode_activation_category_label">Activation</string>
 	<string name="activate_lostphone_mode_label">Activer le mode tél volé/perdu</string>
 	<string name="activate_lostphone_mode_summary">Si cochée, active le mode téléphone volé/perdu.
 	</string>
@@ -90,7 +91,16 @@
 		si reçu par SMS depuis n\'importe quel numéro sans confirmation ou
 		notification.</string>
 	<string name="preferences_sms_lostphone_passphrase_default">Je veux mon téléphone!</string>
-
+	<string name="lostphone_mode_picture_category_label">Prise de Photos/Envoi Picasa</string>
+    <string name="activate_snapshots_label">Activer la prise de photos</string>
+    <string name="activate_snapshots_summary">Si cochée, le téléphone prendra une photo et la publiera sur le compte Picasa configuré en plus d'envoyer un message en mode perdu/volé.
+    </string>
+    <string name="picasa_login_label">Identifiant Picasa</string>
+    <string name="picasa_login_summary">Paramétrer votre identifiant Picasa</string>
+    <string name="picasa_passwd_label">Mot de passe Picasa</string>
+    <string name="picasa_passwd_summary">Paramétrer votre mot de passe Picasa</string>
+    <string name="picasa_album_label">Album Picasa</string>
+    <string name="picasa_album_summary">Nom de l'album Picasa vers lequel envoyer les photos (sera créé si n'existe pas).</string>
 
 	<string name="tracking_confirmation_requested_label">Demande de Confirmation</string>
 	<string name="tracking_confirmation_requested_summary">Si cochée, demande confirmation lors de la
