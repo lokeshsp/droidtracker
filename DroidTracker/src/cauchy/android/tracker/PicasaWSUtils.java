@@ -121,7 +121,9 @@ public class PicasaWSUtils extends DefaultHandler {
             SAXParser sp = spf.newSAXParser();
             XMLReader xr = sp.getXMLReader();
             xr.setContentHandler( this);
-            xr.parse( new InputSource( url.openStream()));
+            InputStream openStream = url.openStream();
+            xr.parse( new InputSource( openStream));
+            openStream.close();
             return albumsIdsByAlbumTitles;
         } catch ( Exception e) {
             e.printStackTrace();
@@ -258,6 +260,12 @@ public class PicasaWSUtils extends DefaultHandler {
     
     public void addPicture(byte[] picture_data, String album_name) {
         
+        if ( picture_data == null || album_name == null) {
+            return;
+        }
+        
+        Log.d( LOG_TAG, "AddPicature, size: " + picture_data.length + ", album: " + album_name);
+        
         Map<String, String> lookup = getAlbumsIdsByAlbumTitles();
         String album_id = lookup.get( album_name);
         
@@ -266,8 +274,8 @@ public class PicasaWSUtils extends DefaultHandler {
             createAlbum( album_name);
             lookup = getAlbumsIdsByAlbumTitles();
             try {
-                // Wait 1s to make sure album is created
-                Thread.sleep( 1000l);
+                // Wait 3s to make sure album is created
+                Thread.sleep( 3000l);
             } catch ( InterruptedException e) {
                 e.printStackTrace();
             }
@@ -280,6 +288,8 @@ public class PicasaWSUtils extends DefaultHandler {
         
         String url = "http://picasaweb.google.com/data/feed/api/user/" + userID
                 + "/albumid/" + album_id;
+        
+        Log.d( LOG_TAG, "Try to upload picture to: " + url);
         
         HttpParams params = new BasicHttpParams();
         HttpProtocolParams.setVersion( params, HttpVersion.HTTP_1_1);

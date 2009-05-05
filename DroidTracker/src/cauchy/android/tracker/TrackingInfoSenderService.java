@@ -138,6 +138,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         sendingCondition = new ConditionVariable( false);
         firstTime = true;
         triggerLocationListeners( getApplicationContext(), 60000L);
+        
     }
     
     @Override
@@ -414,32 +415,11 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                         boolean send_picture_to_picasa = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA,
                                                                            false);
                         if ( send_picture_to_picasa) {
-                            String username = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_LOGIN,
-                                                               null);
-                            String passwd = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_PASSWD,
-                                                             null);
-                            String albumname = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_ALBUM_NAME,
-                                                                null);
                             
-                            if ( username != null &&
-                                 username.length() > 0 &&
-                                 passwd != null &&
-                                 passwd.length() > 0 &&
-                                 albumname != null &&
-                                 albumname.length() > 0
-                                 ) {
-                                
-                                Intent i = new Intent( this,
-                                                       TakeAndPicasaPublishPictureActivity.class);
-                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_LOGIN,
-                                            username);
-                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_PASSWORD,
-                                            passwd);
-                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_DEST_ALBUM_NAME,
-                                            albumname);
-                                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity( i);
-                            }
+                            Intent i = new Intent( getApplicationContext(),
+                                                   PictureTakerActivity.class);
+                            i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity( i);
                         }
                     }
                 } catch ( Exception e) {

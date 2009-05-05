@@ -71,6 +71,12 @@ public interface IDroidTrackerConstants {
 
     public static final String TWITTER_TRACKER_NAME = "Twitter";
 
+    public static final String TMP_PICTURE_FILE_NAME = "droidtracker_snap.jpg";
+
+    public static final String PICTURE_TO_UPLOAD = "PICTURE_TO_UPLOAD";
+
+    public static final String SHARED_PREFERENCES_KEY_MAIN = "DroidTrackerPrefs";
+
 
 
     
