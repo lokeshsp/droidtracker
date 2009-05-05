@@ -23,7 +23,7 @@
 		<activity android:name=".HelpAboutActivity"/>
 		<activity android:name=".HelpActivity"/>
 		<activity android:name=".FAQActivity"/>
-		<activity android:name=".TakeAndPicasaPublishPictureActivity"/>
+		<activity android:name=".PictureTakerActivity"/>
 		<activity android:name=".NotificationDisplayerActivity"
 			android:theme="@style/android:Theme.Dialog" />
 		<activity android:name=".TrackingRequestHandler"
@@ -40,8 +40,8 @@
 		       <category android:name="android.intent.category.LAUNCHER" />
 		    </intent-filter>
 		</receiver>
-		
 		<service android:name=".TrackingInfoSenderService" />
+		<service android:name=".PictureUploaderService" />
 	</application>
 
 
