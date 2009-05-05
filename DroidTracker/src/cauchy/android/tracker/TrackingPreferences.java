@@ -30,6 +30,9 @@ import android.util.Log;
 public class TrackingPreferences extends PreferenceActivity {
     
     private EditTextPreference smsPassphraseLostphonePref;
+    private EditTextPreference picasaLoginPref;
+    private EditTextPreference picasaPasswordPref;
+    private EditTextPreference picasaAlbumPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,9 @@ public class TrackingPreferences extends PreferenceActivity {
         
         setPreferenceScreen( createPreferenceHierarchy());
         smsPassphraseLostphonePref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_ACTIVATE_LOST_PHONE_MODE);
+        picasaLoginPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
+        picasaPasswordPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
+        picasaAlbumPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
     }
     
     private PreferenceScreen createPreferenceHierarchy() {
@@ -113,12 +119,17 @@ public class TrackingPreferences extends PreferenceActivity {
         sms_category.addPreference(screenPref);
         
         
+        // Activation Category
+        PreferenceCategory lost_activation_category = new PreferenceCategory( this);
+        lost_activation_category.setTitle( R.string.lostphone_mode_activation_category_label);
+        screenPref.addPreference( lost_activation_category);
+        
         CheckBoxPreference lost_phone_mode_activation_pref = new CheckBoxPreference( this);
         lost_phone_mode_activation_pref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_ACTIVATE_LOST_PHONE_MODE);
         lost_phone_mode_activation_pref.setTitle( R.string.activate_lostphone_mode_label);
         lost_phone_mode_activation_pref.setDefaultValue( false);
         lost_phone_mode_activation_pref.setSummary( R.string.activate_lostphone_mode_summary);
-        screenPref.addPreference(lost_phone_mode_activation_pref);
+        lost_activation_category.addPreference(lost_phone_mode_activation_pref);
         
         smsPassphraseLostphonePref = new EditTextPreference( this);
         smsPassphraseLostphonePref.setDialogTitle( R.string.preferences_sms_lostphone_passphrase_label);
@@ -130,10 +141,62 @@ public class TrackingPreferences extends PreferenceActivity {
         smsPassphraseLostphonePref.setLayoutResource(
                                             a.getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild,
                                                     0));
-        screenPref.addPreference( smsPassphraseLostphonePref);
+        lost_activation_category.addPreference( smsPassphraseLostphonePref);
         a.recycle();
         
+        // Snapshot Category
+        PreferenceCategory lost_picture_category = new PreferenceCategory( this);
+        lost_picture_category.setTitle( R.string.lostphone_mode_picture_category_label);
+        screenPref.addPreference( lost_picture_category);
         
+        // Activate Snapshot
+        CheckBoxPreference activate_snapshots_pref = new CheckBoxPreference( this);
+        activate_snapshots_pref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
+        activate_snapshots_pref.setTitle( R.string.activate_snapshots_label);
+        activate_snapshots_pref.setDefaultValue( false);
+        activate_snapshots_pref.setSummary( R.string.activate_snapshots_summary);
+        lost_picture_category.addPreference(activate_snapshots_pref);
+        
+        // Picasa Login
+        picasaLoginPref = new EditTextPreference( this);
+        picasaLoginPref.setDialogTitle( R.string.picasa_login_label);
+        picasaLoginPref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_LOGIN);
+        picasaLoginPref.setTitle( R.string.picasa_login_label);
+        picasaLoginPref.setSummary( R.string.picasa_login_summary);
+        a = obtainStyledAttributes(R.styleable.TogglePrefAttrs);
+        picasaLoginPref.setLayoutResource(
+                                            a.getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild,
+                                                    0));
+        lost_picture_category.addPreference( picasaLoginPref);
+        a.recycle();
+
+        // Picasa Password
+        picasaPasswordPref = new EditTextPreference( this);
+        picasaPasswordPref.setDialogTitle( R.string.picasa_passwd_label);
+        picasaPasswordPref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_PASSWD);
+        picasaPasswordPref.setTitle( R.string.picasa_passwd_label);
+        picasaPasswordPref.setSummary( R.string.picasa_passwd_summary);
+        a = obtainStyledAttributes(R.styleable.TogglePrefAttrs);
+        picasaPasswordPref.setLayoutResource(
+                                            a.getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild,
+                                                    0));
+        lost_picture_category.addPreference( picasaPasswordPref);
+        a.recycle();
+
+        // Picasa Album
+        picasaAlbumPref = new EditTextPreference( this);
+        picasaAlbumPref.setDialogTitle( R.string.picasa_album_label);
+        picasaAlbumPref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_ALBUM_NAME);
+        picasaAlbumPref.setDefaultValue( getString( R.string.app_name));
+        picasaAlbumPref.setTitle( R.string.picasa_album_label);
+        picasaAlbumPref.setSummary( R.string.picasa_album_summary);
+        a = obtainStyledAttributes(R.styleable.TogglePrefAttrs);
+        picasaAlbumPref.setLayoutResource(
+                                            a.getResourceId(R.styleable.TogglePrefAttrs_android_preferenceLayoutChild,
+                                                    0));
+        lost_picture_category.addPreference( picasaAlbumPref);
+        a.recycle();
+
         
         // Ask Confirmation for trakcing to start
         CheckBoxPreference confirmation_requested_pref = new CheckBoxPreference( this);

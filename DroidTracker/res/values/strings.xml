@@ -86,6 +86,7 @@
 	<string name="lostphone_mode_label">Lost/Stolen Phone Mode</string>
 	<string name="lostphone_mode_summary">Configure Lost/Stolen phone mode
 		activation and pass phrase.</string>
+    <string name="lostphone_mode_activation_category_label">Activation</string>
 	<string name="activate_lostphone_mode_label">Activate Lost/Stolen Mode</string>
 	<string name="activate_lostphone_mode_summary">If checked, activate Lost/Stolen Phone Mode.
 	</string>
@@ -94,7 +95,16 @@
 		received by SMS from any number without confirmation or notification.
 	</string>
 	<string name="preferences_sms_lostphone_passphrase_default">I want my phone back!</string>
-
+	<string name="lostphone_mode_picture_category_label">Snapshots to Picasa</string>
+    <string name="activate_snapshots_label">Activate Snapshots</string>
+    <string name="activate_snapshots_summary">If checked, the phone will take a picture and upload it to the configured Picasa album when sending the location message.
+    </string>
+    <string name="picasa_login_label">Picasa Login</string>
+    <string name="picasa_login_summary">Set your Picasa Login Name. </string>
+    <string name="picasa_passwd_label">Picasa Password</string>
+    <string name="picasa_passwd_summary">Set your Picasa Password. </string>
+    <string name="picasa_album_label">Picasa Album</string>
+    <string name="picasa_album_summary">Set the name of the Picasa album to upload to (will be created if doesn't exist). </string>
 
 	<string name="tracking_confirmation_requested_label">Confirmation Needed</string>
 	<string name="tracking_confirmation_requested_summary">If checked, ask for confirmation when receiving

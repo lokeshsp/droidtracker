@@ -409,8 +409,6 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                     }
                     
                     // Take Picture if set in preferences
-                    // TODO: Create Preferences for that + add location and
-                    // possibly comments to picture in picasa using sent message
                     if ( tracker.isLostPhoneTrackingActive()) {
                         boolean send_picture_to_picasa = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA,
                                                                            false);
