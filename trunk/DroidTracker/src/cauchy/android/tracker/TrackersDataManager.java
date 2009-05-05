@@ -50,9 +50,9 @@ public class TrackersDataManager {
             + "tracker_name text not null, " + "tracker_number text key, "
             + "tracker_email text not null, " + "tracking_state integer, "
             + "tracking_period integer, " + "tracking_countdown integer, "
-            + "tracking_format text not null, " + "number_lookup text not null, "
-            + "tracker_type integer, " + "lostphone_tracking_state integer"
-            + ");";
+            + "tracking_format text not null, "
+            + "number_lookup text not null, " + "tracker_type integer, "
+            + "lostphone_tracking_state integer" + ");";
     
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
@@ -112,8 +112,9 @@ public class TrackersDataManager {
         db.insert( DATABASE_TABLE, null, initialValues);
     }
     
-    public void addTemporaryTracker( String number) {
-        Log.i( IDroidTrackerConstants.CAUCHY_LOG, "Adding TemporaryTracker: " + number);
+    public void addTemporaryTracker(String number) {
+        Log.i( IDroidTrackerConstants.CAUCHY_LOG, "Adding TemporaryTracker: "
+                + number);
         ContentValues initialValues = new ContentValues();
         initialValues.put( "tracker_id", getNewTemporaryTrackerID());
         initialValues.put( "tracker_name", number);
@@ -135,30 +136,33 @@ public class TrackersDataManager {
         Log.i( IDroidTrackerConstants.CAUCHY_LOG, "Adding Twitter Tracker");
         ContentValues initialValues = new ContentValues();
         initialValues.put( "tracker_id", getNewTemporaryTrackerID());
-        initialValues.put( "tracker_name", IDroidTrackerConstants.TWITTER_TRACKER_NAME);
+        initialValues.put( "tracker_name",
+                           IDroidTrackerConstants.TWITTER_TRACKER_NAME);
         initialValues.put( "tracker_number", "0");
         initialValues.put( "tracker_email", "");
         initialValues.put( "tracking_state", STATE_NOT_TRACKING);
         initialValues.put( "tracking_period", 0);
         initialValues.put( "tracking_countdown", 0);
-        initialValues.put( "tracking_format", IDroidTrackerConstants.FORMAT_TWITTER);
+        initialValues.put( "tracking_format",
+                           IDroidTrackerConstants.FORMAT_TWITTER);
         initialValues.put( "number_lookup", "0");
         initialValues.put( "tracker_type", TYPE_OTHER_APPLICATION);
         initialValues.put( "lostphone_tracking_state", LOST_PHONE_TRACKING_OFF);
         db.insert( DATABASE_TABLE, null, initialValues);
     }
-
     
     private long getNewTemporaryTrackerID() {
-        Log.d( IDroidTrackerConstants.CAUCHY_LOG, "getNewTemporaryTrackerID start.");
+        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+               "getNewTemporaryTrackerID start.");
         int result = -1;
         while ( fetchTrackerById( result) != null) {
             result--;
         }
-        Log.d( IDroidTrackerConstants.CAUCHY_LOG, "getNewTemporaryTrackerID returns: " + result);
+        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+               "getNewTemporaryTrackerID returns: " + result);
         return result;
     }
-
+    
     public void updateTracker(long id, String name, String number, String email) {
         ContentValues args = new ContentValues();
         args.put( "tracker_name", name);
@@ -249,18 +253,11 @@ public class TrackersDataManager {
     private List<Tracker> fetchTrackers(String criterion) {
         ArrayList<Tracker> matching_trackers = new ArrayList<Tracker>();
         // Tracker tracker = new Tracker();
-        Cursor c = db.query( DATABASE_TABLE,
-                             new String[] { "tracker_id", "tracker_name",
-                                     "tracker_number", "tracker_email",
-                                     "tracking_state", "tracking_period",
-                                     "tracking_countdown", "tracking_format",
-                                     "number_lookup", "tracker_type",
-                                     "lostphone_tracking_state" },
-                             criterion,
-                             null,
-                             null,
-                             null,
-                             null);
+        Cursor c = db.query( DATABASE_TABLE, new String[] { "tracker_id",
+                "tracker_name", "tracker_number", "tracker_email",
+                "tracking_state", "tracking_period", "tracking_countdown",
+                "tracking_format", "number_lookup", "tracker_type",
+                "lostphone_tracking_state" }, criterion, null, null, null, null);
         int numRows = c.getCount();
         Tracker tracker = null;
         c.moveToFirst();
@@ -285,18 +282,11 @@ public class TrackersDataManager {
     
     private Tracker fetchTracker(String criterion) {
         Tracker tracker = new Tracker();
-        Cursor c = db.query( DATABASE_TABLE,
-                             new String[] { "tracker_id", "tracker_name",
-                                     "tracker_number", "tracker_email",
-                                     "tracking_state", "tracking_period",
-                                     "tracking_countdown", "tracking_format",
-                                     "number_lookup", "tracker_type",
-                                     "lostphone_tracking_state" },
-                             criterion,
-                             null,
-                             null,
-                             null,
-                             null);
+        Cursor c = db.query( DATABASE_TABLE, new String[] { "tracker_id",
+                "tracker_name", "tracker_number", "tracker_email",
+                "tracking_state", "tracking_period", "tracking_countdown",
+                "tracking_format", "number_lookup", "tracker_type",
+                "lostphone_tracking_state" }, criterion, null, null, null, null);
         if ( c.getCount() > 0) {
             c.moveToFirst();
             tracker.id = c.getLong( 0);
@@ -314,22 +304,24 @@ public class TrackersDataManager {
         return null;
     }
     
-    public void startTracking(long id, long period, String format, boolean is_lost_phone_mode) {
+    public void startTracking(long id,
+                              long period,
+                              String format,
+                              boolean is_lost_phone_mode) {
         Log.i( IDroidTrackerConstants.CAUCHY_LOG, "-------> START TRACKING:");
         Log.i( IDroidTrackerConstants.CAUCHY_LOG, "         id     = " + id);
         Log.i( IDroidTrackerConstants.CAUCHY_LOG, "         period = " + period);
         Log.i( IDroidTrackerConstants.CAUCHY_LOG, "         format = " + format);
         // MAIL and TWITTER format are available for one time tracking only:
-        if ( period != -1 &&
-             (IDroidTrackerConstants.FORMAT_MAIL.equals( format) ||
-              IDroidTrackerConstants.FORMAT_TWITTER.equals( format)
-            ) ) {
+        if ( period != -1
+                && ( IDroidTrackerConstants.FORMAT_MAIL.equals( format) || IDroidTrackerConstants.FORMAT_TWITTER.equals( format))) {
             Log.i( IDroidTrackerConstants.CAUCHY_LOG,
                    "         FORCING FORMAT TO SMS !!!= ");
             format = IDroidTrackerConstants.FORMAT_SMS;
         }
         
-        int lost_phone_mode = (is_lost_phone_mode)?LOST_PHONE_TRACKING_ON:LOST_PHONE_TRACKING_OFF;
+        int lost_phone_mode = ( is_lost_phone_mode) ? LOST_PHONE_TRACKING_ON
+                : LOST_PHONE_TRACKING_OFF;
         updateTrackersState( id, STATE_TRACKING, period, format);
         updateLostPhoneModeState( id, lost_phone_mode);
     }
@@ -340,12 +332,11 @@ public class TrackersDataManager {
         // Check if this was a lost phone tracking only tracker. If so
         // delete this temporary tracker
         Tracker t = fetchTrackerById( id);
-        updateTrackersState( id,
-                             STATE_NOT_TRACKING,
-                             0,
-                             t.tracking_format);
-        if ( t.isTemporaryLostPhoneTracker()) {
-            deleteTracker( id);
+        if ( t != null) {
+            updateTrackersState( id, STATE_NOT_TRACKING, 0, t.tracking_format);
+            if ( t.isTemporaryLostPhoneTracker()) {
+                deleteTracker( id);
+            }
         }
     }
     

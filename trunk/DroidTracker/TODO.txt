@@ -6,14 +6,14 @@
   -> DONE! Removes Auto GPS on
   -> Add Use Cases in doc
   -> Possibly, new UI with start page presenting use cases like menus
-  -> Take Picture and/or record audio and send by Mail (or publish on Picasa for pictures)
+  -> DONE! (80%) (to Picasa): Take Picture and/or record audio and send by Mail (or publish on Picasa for pictures)
   -> Send by Mail periodically
   -> Send to Twitter periodically
-  -> Shortcut to create Contacts
+  -> DONE! Shortcut to create Contacts
         -> Grant Permission becomes Add Tracker
           -> Choice: 1)From Contact List? 2)Brand New Tracker?
           -> 1) As of today
-          -> 2) Input form, Name and Number. Checkbox to create contact or not
+          -> 2) Call Android Add Contact Page and get Result back
   -> Send to FaceBook
   -> Other SMS features?
   -> Create my own intent to perform an action on SMS
