@@ -54,11 +54,11 @@ public class TrackingInfoSenderService extends Service implements Runnable {
     private LocationManager locationManager;
     private boolean gpsAvailable;
     private boolean firstTime = true;
-//    private String initialAllowedLocationProviders = "";
+    // private String initialAllowedLocationProviders = "";
     private Vector<Tracker> sessionOneOffTrackers = new Vector<Tracker>();
     private Vector<Tracker> sessionPeriodicTrackersToBeWarned = new Vector<Tracker>();
     private boolean locationTrackingOn = false;
-//    private String autoSetAllowedLocationProviders = null;
+    // private String autoSetAllowedLocationProviders = null;
     private ConditionVariable sendingCondition;
     private boolean waitingToSend = false;
     
@@ -80,7 +80,9 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 // location is on but
                 // GPS is off and auto-on option is not set.
                 if ( ( LocationManager.GPS_PROVIDER.equals( location.getProvider()) && gpsAvailable)
-                        || ( gpsLastStatus == LocationProvider.OUT_OF_SERVICE)) { // && !isProvidersAutoTurnOnOptionOn())) {
+                        || ( gpsLastStatus == LocationProvider.OUT_OF_SERVICE)) { // &&
+                    // !isProvidersAutoTurnOnOptionOn()))
+                    // {
                     sendingCondition.open();
                 }
             }
@@ -233,7 +235,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
             while ( it.hasNext()) {
                 Tracker tracker = (Tracker) it.next();
                 if ( tracker != null && tracker.isTracking()) {
-                    boolean success  = sendToTracker( locationMessage, tracker);
+                    boolean success = sendToTracker( locationMessage, tracker);
                     if ( success) {
                         dataManager.resetCountDownForTrackerId( tracker.id);
                     } else {
@@ -349,17 +351,19 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         // Remove location change listeners
         locationManager.removeUpdates( locationChangesListener);
         
-//        // Put Location Provider's states back to where they were when tracking
-//        // started
-//        resetLocationProvidersToOriginalStateIfNeeded();
+        // // Put Location Provider's states back to where they were when
+        // tracking
+        // // started
+        // resetLocationProvidersToOriginalStateIfNeeded();
         
         locationTrackingOn = false;
     }
     
-    private boolean sendToTracker(LocationMessage locationMessage, Tracker tracker) {
+    private boolean sendToTracker(LocationMessage locationMessage,
+                                  Tracker tracker) {
         Log.i( IDroidTrackerConstants.CAUCHY_LOG,
-               "TrackingInfoSenderService sending to tracker: "
-               + tracker + ", format = " + tracker.tracking_format);
+               "TrackingInfoSenderService sending to tracker: " + tracker
+                       + ", format = " + tracker.tracking_format);
         // SMS Format
         if ( IDroidTrackerConstants.FORMAT_SMS.equals( tracker.tracking_format)) {
             if ( tracker.number != null) {
@@ -402,6 +406,42 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                                           msg,
                                           sent_msg_notification_title);
                     }
+                    
+                    // Take Picture if set in preferences
+                    // TODO: Create Preferences for that + add location and
+                    // possibly comments to picture in picasa using sent message
+                    if ( tracker.isLostPhoneTrackingActive()) {
+                        boolean send_picture_to_picasa = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA,
+                                                                           false);
+                        if ( send_picture_to_picasa) {
+                            String username = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_LOGIN,
+                                                               null);
+                            String passwd = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_PASSWD,
+                                                             null);
+                            String albumname = prefs.getString( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_ALBUM_NAME,
+                                                                null);
+                            
+                            if ( username != null &&
+                                 username.length() > 0 &&
+                                 passwd != null &&
+                                 passwd.length() > 0 &&
+                                 albumname != null &&
+                                 albumname.length() > 0
+                                 ) {
+                                
+                                Intent i = new Intent( this,
+                                                       TakeAndPicasaPublishPictureActivity.class);
+                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_LOGIN,
+                                            username);
+                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_PASSWORD,
+                                            passwd);
+                                i.putExtra( TakeAndPicasaPublishPictureActivity.KEY_PICASA_DEST_ALBUM_NAME,
+                                            albumname);
+                                i.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity( i);
+                            }
+                        }
+                    }
                 } catch ( Exception e) {
                     Log.e( IDroidTrackerConstants.CAUCHY_LOG, "     ==> msg: "
                             + locationMessage.getMessage() + " error "
@@ -436,22 +476,28 @@ public class TrackingInfoSenderService extends Service implements Runnable {
             startActivity( chooser_intent);
         } else if ( DroidTrackerUtils.isTwitter( tracker)) {
             Log.i( IDroidTrackerConstants.CAUCHY_LOG, "SENDING TO TWITTER");
-//            final String twitter_msg = getString( R.string.twitter_msg_header) + "" +
-//              locationMessage.getShortLocationURLString();
+            // final String twitter_msg = getString(
+            // R.string.twitter_msg_header) + "" +
+            // locationMessage.getShortLocationURLString();
             final String twitter_msg = locationMessage.getTwitterMessage();
             Intent twitter_intent = DroidTrackerUtils.getTweetIntent( getApplicationContext(),
                                                                       twitter_msg);
             twitter_intent.setFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-            Log.i( IDroidTrackerConstants.CAUCHY_LOG, "Twitter intent = " + twitter_intent);
+            Log.i( IDroidTrackerConstants.CAUCHY_LOG, "Twitter intent = "
+                    + twitter_intent);
             if ( twitter_intent != null) {
                 try {
                     startActivity( twitter_intent);
                 } catch ( ActivityNotFoundException e) {
                     // Twidroid is not installed
                     Log.e( IDroidTrackerConstants.CAUCHY_LOG,
-                           "Error: Trying to send location to twitter even though twidroid is not installed: " + e.getMessage());
-                    // TODO: Dialog instead of toast in order to get a onResume() on DroidTracker
-                    Toast t = Toast.makeText( getApplicationContext(), "Cannot Send to Twitter: Twidroid is not installed!", Toast.LENGTH_SHORT);
+                           "Error: Trying to send location to twitter even though twidroid is not installed: "
+                                   + e.getMessage());
+                    // TODO: Dialog instead of toast in order to get a
+                    // onResume() on DroidTracker
+                    Toast t = Toast.makeText( getApplicationContext(),
+                                              "Cannot Send to Twitter: Twidroid is not installed!",
+                                              Toast.LENGTH_SHORT);
                     t.show();
                     return false;
                 }
@@ -562,9 +608,9 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 Looper.prepare();
                 Log.d( IDroidTrackerConstants.CAUCHY_LOG,
                        " --------> Turning on location change listeners.");
-//                // Turn on location providers if they're off and the auto
-//                // turn-on is set in preferences
-//                turnLocationProvidersOnIfNeeded( getApplicationContext());
+                // // Turn on location providers if they're off and the auto
+                // // turn-on is set in preferences
+                // turnLocationProvidersOnIfNeeded( getApplicationContext());
                 gpsAvailable = locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER);
                 try {
                     locationManager.requestLocationUpdates( LocationManager.GPS_PROVIDER,
@@ -591,97 +637,107 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         t.start();
     }
     
-//    /**
-//     * Turn on location providers if they're off and the auto turn-on is set in
-//     * preferences.
-//     * 
-//     * @param context
-//     */
-//    private void turnLocationProvidersOnIfNeeded(final Context context) {
-//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-//        Log.i( IDroidTrackerConstants.CAUCHY_LOG, "auto_turn_providers_on = "
-//                + auto_turn_providers_on);
-//        if ( auto_turn_providers_on) {
-//            initialAllowedLocationProviders = Settings.System.getString( context.getContentResolver(),
-//                                                                         Settings.System.LOCATION_PROVIDERS_ALLOWED);
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "TrackingInfoSenderService.turnLocationProvidersOnIfNeeded() active_location_providers = "
-//                           + initialAllowedLocationProviders);
-//            if ( initialAllowedLocationProviders == null
-//                    || initialAllowedLocationProviders.length() == 0) {
-//                Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                       "                                    No location providers! Activating them! ");
-//                setAllowedLocationProviders( context,
-//                                             LocationManager.NETWORK_PROVIDER
-//                                                     + ","
-//                                                     + LocationManager.GPS_PROVIDER);
-//            } else {
-//                StringBuffer new_providers = new StringBuffer( initialAllowedLocationProviders);
-//                if ( !initialAllowedLocationProviders.contains( LocationManager.NETWORK_PROVIDER)) {
-//                    new_providers.append( ","
-//                            + LocationManager.NETWORK_PROVIDER);
-//                }
-//                if ( !initialAllowedLocationProviders.contains( LocationManager.GPS_PROVIDER)) {
-//                    new_providers.append( "," + LocationManager.GPS_PROVIDER);
-//                }
-//                if ( new_providers.length() > initialAllowedLocationProviders.length()) {
-//                    setAllowedLocationProviders( context,
-//                                                 new_providers.toString());
-//                }
-//            }
-//        }
-//    }
+    // /**
+    // * Turn on location providers if they're off and the auto turn-on is set
+    // in
+    // * preferences.
+    // *
+    // * @param context
+    // */
+    // private void turnLocationProvidersOnIfNeeded(final Context context) {
+    // boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+    // Log.i( IDroidTrackerConstants.CAUCHY_LOG, "auto_turn_providers_on = "
+    // + auto_turn_providers_on);
+    // if ( auto_turn_providers_on) {
+    // initialAllowedLocationProviders = Settings.System.getString(
+    // context.getContentResolver(),
+    // Settings.System.LOCATION_PROVIDERS_ALLOWED);
+    // Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+    // "TrackingInfoSenderService.turnLocationProvidersOnIfNeeded() active_location_providers = "
+    // + initialAllowedLocationProviders);
+    // if ( initialAllowedLocationProviders == null
+    // || initialAllowedLocationProviders.length() == 0) {
+    // Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+    // "                                    No location providers! Activating them! ");
+    // setAllowedLocationProviders( context,
+    // LocationManager.NETWORK_PROVIDER
+    // + ","
+    // + LocationManager.GPS_PROVIDER);
+    // } else {
+    // StringBuffer new_providers = new StringBuffer(
+    // initialAllowedLocationProviders);
+    // if ( !initialAllowedLocationProviders.contains(
+    // LocationManager.NETWORK_PROVIDER)) {
+    // new_providers.append( ","
+    // + LocationManager.NETWORK_PROVIDER);
+    // }
+    // if ( !initialAllowedLocationProviders.contains(
+    // LocationManager.GPS_PROVIDER)) {
+    // new_providers.append( "," + LocationManager.GPS_PROVIDER);
+    // }
+    // if ( new_providers.length() > initialAllowedLocationProviders.length()) {
+    // setAllowedLocationProviders( context,
+    // new_providers.toString());
+    // }
+    // }
+    // }
+    // }
     
-//    /**
-//     * @return
-//     */
-//    private boolean isProvidersAutoTurnOnOptionOn() {
-//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences( this);
-//        boolean auto_turn_providers_on = prefs.getBoolean( IDroidTrackerConstants.PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON,
-//                                                           true);
-//        return auto_turn_providers_on;
-//    }
+    // /**
+    // * @return
+    // */
+    // private boolean isProvidersAutoTurnOnOptionOn() {
+    // SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
+    // this);
+    // boolean auto_turn_providers_on = prefs.getBoolean(
+    // IDroidTrackerConstants.PREFERENCE_KEY_AUTO_TURN_PROVIDERS_ON,
+    // true);
+    // return auto_turn_providers_on;
+    // }
     
-//    /**
-//     * Put Location Provider's states back to where they were when service
-//     * started.
-//     */
-//    private void resetLocationProvidersToOriginalStateIfNeeded() {
-//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-//        if ( auto_turn_providers_on) {
-//            String currently_allowed_providers = Settings.System.getString( getApplicationContext().getContentResolver(),
-//                                                                            Settings.System.LOCATION_PROVIDERS_ALLOWED);
-//            // Set back initial allowed location providers only if the user
-//            // has not changed them since as we don't want to mess them up if
-//            // so.
-//            if ( autoSetAllowedLocationProviders != null
-//                    && autoSetAllowedLocationProviders.equals( currently_allowed_providers)) {
-//                setAllowedLocationProviders( getApplicationContext(),
-//                                             initialAllowedLocationProviders);
-//            }
-//        }
-//    }
+    // /**
+    // * Put Location Provider's states back to where they were when service
+    // * started.
+    // */
+    // private void resetLocationProvidersToOriginalStateIfNeeded() {
+    // boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+    // if ( auto_turn_providers_on) {
+    // String currently_allowed_providers = Settings.System.getString(
+    // getApplicationContext().getContentResolver(),
+    // Settings.System.LOCATION_PROVIDERS_ALLOWED);
+    // // Set back initial allowed location providers only if the user
+    // // has not changed them since as we don't want to mess them up if
+    // // so.
+    // if ( autoSetAllowedLocationProviders != null
+    // && autoSetAllowedLocationProviders.equals( currently_allowed_providers))
+    // {
+    // setAllowedLocationProviders( getApplicationContext(),
+    // initialAllowedLocationProviders);
+    // }
+    // }
+    // }
     
-//    /**
-//     * @param context
-//     * @param allowed_location_providers
-//     */
-//    private void setAllowedLocationProviders(final Context context,
-//                                             String allowed_location_providers) {
-//        boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
-//        if ( !auto_turn_providers_on) {
-//            return;
-//        }
-//        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//               "Setting allowed location providers to: "
-//                       + allowed_location_providers);
-//        Settings.System.putString( context.getContentResolver(),
-//                                   Settings.System.LOCATION_PROVIDERS_ALLOWED,
-//                                   allowed_location_providers);
-//        autoSetAllowedLocationProviders = allowed_location_providers;
-//        Intent intent = new Intent( "android.intent.action.ACTION_PROVIDER_CHANGED");
-//        context.sendBroadcast( intent);
-//    }
+    // /**
+    // * @param context
+    // * @param allowed_location_providers
+    // */
+    // private void setAllowedLocationProviders(final Context context,
+    // String allowed_location_providers) {
+    // boolean auto_turn_providers_on = isProvidersAutoTurnOnOptionOn();
+    // if ( !auto_turn_providers_on) {
+    // return;
+    // }
+    // Log.d( IDroidTrackerConstants.CAUCHY_LOG,
+    // "Setting allowed location providers to: "
+    // + allowed_location_providers);
+    // Settings.System.putString( context.getContentResolver(),
+    // Settings.System.LOCATION_PROVIDERS_ALLOWED,
+    // allowed_location_providers);
+    // autoSetAllowedLocationProviders = allowed_location_providers;
+    // Intent intent = new Intent(
+    // "android.intent.action.ACTION_PROVIDER_CHANGED");
+    // context.sendBroadcast( intent);
+    // }
     
     @Override
     public IBinder onBind(Intent arg0) {
@@ -724,7 +780,6 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 result.append( " ");
                 result.append( f.format( result_date));
                 
-                
                 StringBuffer twitter_result = new StringBuffer();
                 twitter_result.append( getApplicationContext().getString( R.string.result_when));
                 twitter_result.append( " ");
@@ -733,7 +788,8 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 twitter_result.append( getString( R.string.twitter_msg_header));
                 
                 if ( addressFromGeoCode == null) {
-                    result.append( "\n" + getString( R.string.location_no_translation_msg));
+                    result.append( "\n"
+                            + getString( R.string.location_no_translation_msg));
                     
                     twitter_result.append( " ");
                     twitter_result.append( getString( R.string.location_no_translation_msg));

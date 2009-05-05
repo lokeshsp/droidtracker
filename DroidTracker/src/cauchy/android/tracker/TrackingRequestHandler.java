@@ -414,8 +414,8 @@ public class TrackingRequestHandler extends Activity implements
                                                                                          true);
             if ( isLostPhoneTracking ||
                  ( active_location_providers.contains( LocationManager.GPS_PROVIDER) &&
-                   active_location_providers.contains( LocationManager.NETWORK_PROVIDER) &&
-                   !should_promt_user_if_single_provider)) {
+                   active_location_providers.contains( LocationManager.NETWORK_PROVIDER)) ||
+                 (!should_promt_user_if_single_provider)) {
                 doStartSendingLocation();
             } else {
                 // If only one source active and settings set to prompt user

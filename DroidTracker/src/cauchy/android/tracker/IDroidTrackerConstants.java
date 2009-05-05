@@ -55,6 +55,11 @@ public interface IDroidTrackerConstants {
     public static final String PREFERENCE_KEY_DISPLAY_SENT_INFO = "PREFERENCE_KEY_DISPLAY_SENT_INFO";
     public static final String PREFERENCE_KEY_SMS_PERIOD_PASSPHRASE = "PREFERENCE_KEY_SMS_PERIOD_PASSPHRASE";
     public static final String PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER = "PREFERENCE_KEY_DISPLAY_SETTINGS_FOR_SINGLE_PROVIDER";
+    public static final String PREFERENCE_KEY_SEND_PICTURE_TO_PICASA = "PREFERENCE_KEY_SEND_PICTURE_TO_PICASA";
+    public static final String PREFERENCE_KEY_PICASA_LOGIN = "PREFERENCE_KEY_PICASA_LOGIN";
+    public static final String PREFERENCE_KEY_PICASA_PASSWD = "PREFERENCE_KEY_PICASA_PASSWD";
+    public static final String PREFERENCE_KEY_PICASA_ALBUM_NAME = "PREFERENCE_KEY_PICASA_ALBUM_NAME";
+
     public static final String PERIOD_PASSPHRASE_SEPARATOR = " {x} ";
 
     public static final int SENT_NOTIFICATION_ID = 0;
@@ -65,6 +70,7 @@ public interface IDroidTrackerConstants {
     public static final String FAQ_TAG = "FAQ_TAG";
 
     public static final String TWITTER_TRACKER_NAME = "Twitter";
+
 
 
     
