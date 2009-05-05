@@ -172,7 +172,7 @@
 		of people from your phone contacts that you allow requesting and being
 		sent your location. On first run, this list will be empty. To add a
 		new tracker, use the \"Add Tracker\" menu to chose a new allowed
-		tracker from your contacts.\nThe top spinner let you change the
+		tracker from your contacts or to create a new one.\nThe top spinner let you change the
 		display to view only people currently tracking you. However, even in
 		the default mode, people tracking you will be shown.\nWarning: When
 		adding a new tracker, part of this contact\'s information is copied to
@@ -273,7 +273,8 @@
 		activate/deactivate this
 		mode and configure the associated pass-phrase
 		from the application
-		preferences page.\n\n
+		preferences page.\nSince version 1.10, a new feature is associated to the lost/stolen phode mode: the snapshot feature. It allows making the Android device take a picture when the reply message is sent to you and then publish it to a Picasa web album of your choice. This can help you finding where your phone really is. This feature can also be used for a completely different purpose: as a webcam which is SMS remote controlable, that can take pictures at given times and send them to Picasa.
+		\n\n
 		<b>Twitter Integration</b>
 		\nWhen Twidroid (most popular Android Twitter client) is installed on
 		your phone, Droidtracker interacts with it and adds Twitter on top of
