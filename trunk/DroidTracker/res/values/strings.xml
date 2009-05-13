@@ -129,7 +129,7 @@
 	<string name="tracker_periodicity_suffix">mn</string>
 
 	<string name="about_label">About</string>
-	<string name="about_version">DroidTracker v1.10</string>
+	<string name="about_version">DroidTracker v1.12</string>
 	<string name="about_author">
 		by Olivier Bonal\n
 	</string>
