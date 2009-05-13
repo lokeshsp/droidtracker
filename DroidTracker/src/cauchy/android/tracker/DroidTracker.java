@@ -251,9 +251,6 @@ public class DroidTracker extends ListActivity implements
         switch ( item.getItemId()) {
             case MENU_NEW_TRACKER_ID:
                 showDialog( DIALOG_NEW_TRACKER);
-//                Intent i = new Intent( Intent.ACTION_PICK,
-//                                       Uri.parse( "content://contacts/people/"));
-//                startActivityForResult( i, PICK_CONTACT_REQUEST);
                 break;
             case MENU_STOP_ALL_TRACKING_ID:
                 if ( selected_tracker != null) {
@@ -535,6 +532,7 @@ public class DroidTracker extends ListActivity implements
                                                     case 0:
                                                         Intent i = new Intent( Intent.ACTION_PICK,
                                                                              Uri.parse( "content://contacts/people/"));
+                                                        i.setType( Contacts.Phones.CONTENT_TYPE);
                                                         startActivityForResult( i, PICK_CONTACT_REQUEST);
                                                         break;
                                                     case 1:
@@ -619,6 +617,9 @@ public class DroidTracker extends ListActivity implements
                         + " " + getSelectedTrackerName());
                 setDialogTitleFromSelectedTracker( dialog, selectedTracker);
                 
+                break;
+            case DIALOG_STOP_TRACKING:
+                setDialogTitleFromSelectedTracker( dialog, selectedTracker);
                 break;
             default:
                 break;
