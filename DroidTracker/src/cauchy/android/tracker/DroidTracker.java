@@ -532,7 +532,7 @@ public class DroidTracker extends ListActivity implements
                                                     case 0:
                                                         Intent i = new Intent( Intent.ACTION_PICK,
                                                                              Uri.parse( "content://contacts/people/"));
-                                                        i.setType( Contacts.Phones.CONTENT_TYPE);
+//                                                        i.setType( Contacts.Phones.CONTENT_TYPE);
                                                         startActivityForResult( i, PICK_CONTACT_REQUEST);
                                                         break;
                                                     case 1:
