@@ -25,6 +25,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 
 public class TrackingPreferences extends PreferenceActivity {
@@ -172,6 +173,10 @@ public class TrackingPreferences extends PreferenceActivity {
 
         // Picasa Password
         picasaPasswordPref = new EditTextPreference( this);
+        //
+        PasswordTransformationMethod transMethod = new PasswordTransformationMethod();
+        picasaPasswordPref.getEditText().setTransformationMethod(transMethod);
+        //
         picasaPasswordPref.setDialogTitle( R.string.picasa_passwd_label);
         picasaPasswordPref.setKey( IDroidTrackerConstants.PREFERENCE_KEY_PICASA_PASSWD);
         picasaPasswordPref.setTitle( R.string.picasa_passwd_label);
