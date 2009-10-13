@@ -202,6 +202,7 @@ public class TrackersDataManager {
                 }
                 c.moveToNext();
             }
+            c.close();
         } catch ( SQLException e) {
             Log.println( Log.ERROR,
                          IDroidTrackerConstants.CAUCHY_LOG,
@@ -276,7 +277,7 @@ public class TrackersDataManager {
             matching_trackers.add( tracker);
             c.moveToNext();
         }
-        
+        c.close();
         return matching_trackers;
     }
     
@@ -299,8 +300,10 @@ public class TrackersDataManager {
             tracker.tracking_format = c.getString( 7);
             tracker.tracker_type = c.getLong( 9);
             tracker.lostphone_tracking_state = c.getLong( 10);
+            c.close();
             return tracker;
         }
+        c.close();
         return null;
     }
     
