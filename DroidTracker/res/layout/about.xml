@@ -4,7 +4,7 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+		<TextView android:id="@+id/about_version_label"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:gravity="center" android:textStyle="bold" android:text="@string/about_version" />
 		<TextView xmlns:android="http://schemas.android.com/apk/res/android"

@@ -56,7 +56,7 @@
 	<string name="result_geocode">\n</string>
 	<string name="result_map_url">\n\nMap URL:\n</string>
 
-	<string name="twitter_msg_header">I'm here: </string>
+	<string name="twitter_msg_header">"I'm here: "</string>
 
 	<string name="tracking_refused_msg">Sorry but your tracking request has been
 		refused.</string>
@@ -104,7 +104,7 @@
     <string name="picasa_passwd_label">Picasa Password</string>
     <string name="picasa_passwd_summary">Set your Picasa Password. </string>
     <string name="picasa_album_label">Picasa Album</string>
-    <string name="picasa_album_summary">Set the name of the Picasa album to upload to (will be created if doesn't exist). </string>
+    <string name="picasa_album_summary">"Set the name of the Picasa album to upload to (will be created if doesn't exist). "</string>
 
 	<string name="tracking_confirmation_requested_label">Confirmation Needed</string>
 	<string name="tracking_confirmation_requested_summary">If checked, ask for confirmation when receiving
@@ -129,7 +129,7 @@
 	<string name="tracker_periodicity_suffix">mn</string>
 
 	<string name="about_label">About</string>
-	<string name="about_version">DroidTracker v1.12</string>
+	<string name="about_version">DroidTracker v</string>
 	<string name="about_author">
 		by Olivier Bonal\n
 	</string>
