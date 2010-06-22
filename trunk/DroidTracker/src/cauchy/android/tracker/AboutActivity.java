@@ -16,12 +16,25 @@
 package cauchy.android.tracker;
 
 import android.app.Activity;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.widget.TextView;
 
 public class AboutActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
         setContentView( R.layout.about);
+        
+        TextView versionField = (TextView)findViewById( R.id.about_version_label);
+        if ( versionField != null) {
+	        try {
+				String curVersion = getPackageManager().getPackageInfo("cauchy.android.tracker", 0).versionName;
+				versionField.setText( getText(R.string.about_version) + curVersion);
+	        } catch (NameNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+        }
     }
 }

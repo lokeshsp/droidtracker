@@ -18,6 +18,6 @@
     
     <string-array name="new_tracker_menu_options">
         <item>Choisir dans mes contacts</item>
-        <item>Créer un nouveau contact et l'utiliser</item>
+        <item>"Créer un nouveau contact et l'utiliser"</item>
     </string-array>
 </resources>
