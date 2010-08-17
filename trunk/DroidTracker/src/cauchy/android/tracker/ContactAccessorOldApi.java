@@ -125,20 +125,24 @@ public class ContactAccessorOldApi extends ContactAccessor {
 		Uri contact_uri = android.provider.Contacts.Phones.CONTENT_URI;
 		String[] projection = new String[] {
               android.provider.Contacts.Phones.PERSON_ID,
-              android.provider.Contacts.PeopleColumns.NAME };
+              android.provider.Contacts.Phones.NAME };
 		
 		// You know have the number so now query it like this
 		Cursor cur = ctx.getContentResolver().query(
-				Uri.parse( contact_uri.toString() + "/" + contactId),
+				//Uri.parse( contact_uri.toString() + "/" + contactId),
+				contact_uri,
 				projection,
-				null,
+				android.provider.Contacts.Phones.PERSON_ID
+                + "=\'"
+                + contactId
+                + "\'",
 				null,
 				null);
 		try {
 			while (cur.moveToNext()) {
 				String name = cur
 						.getString(cur
-								.getColumnIndex(android.provider.Contacts.PeopleColumns.NAME));
+								.getColumnIndex(android.provider.Contacts.Phones.NAME));
 				if (name != null) {
 					return name;
 				}
