@@ -219,9 +219,9 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                "     \n\n===================> sendPosition() run():\n"
                        + locationMessage.getMessage());
         if ( sessionOneOffTrackers != null && !sessionOneOffTrackers.isEmpty()) {
-            Iterator<Tracker> it = sessionOneOffTrackers.iterator();
+            Iterator<Tracker> it = new Vector<Tracker>(sessionOneOffTrackers).iterator();
             while ( it.hasNext()) {
-                Tracker tracker = (Tracker) it.next();
+                Tracker tracker = it.next();
                 if ( tracker != null && tracker.isTracking()) {
                     // Send Info
                     sendToTracker( locationMessage, tracker);
@@ -236,7 +236,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
                 && !sessionPeriodicTrackersToBeWarned.isEmpty()) {
             Iterator<Tracker> it = sessionPeriodicTrackersToBeWarned.iterator();
             while ( it.hasNext()) {
-                Tracker tracker = (Tracker) it.next();
+                Tracker tracker = it.next();
                 if ( tracker != null && tracker.isTracking()) {
                     boolean success = sendToTracker( locationMessage, tracker);
                     if ( success) {
@@ -267,7 +267,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         if ( trackers_list != null && !trackers_list.isEmpty()) {
             Iterator<Tracker> it = trackers_list.iterator();
             while ( it.hasNext()) {
-                Tracker tracker = (Tracker) it.next();
+                Tracker tracker = it.next();
                 if ( tracker != null && tracker.isTracking()) {
                     
                     Log.i( IDroidTrackerConstants.CAUCHY_LOG, "tracker = "
@@ -322,7 +322,7 @@ public class TrackingInfoSenderService extends Service implements Runnable {
         if ( trackers_list != null && !trackers_list.isEmpty()) {
             Iterator<Tracker> it = trackers_list.iterator();
             while ( it.hasNext()) {
-                Tracker tracker = (Tracker) it.next();
+                Tracker tracker = it.next();
                 if ( tracker != null && tracker.isTracking()) {
                     
                     // First check for one-off trackers

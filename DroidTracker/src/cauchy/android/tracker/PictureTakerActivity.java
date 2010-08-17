@@ -2,6 +2,8 @@ package cauchy.android.tracker;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -138,8 +140,31 @@ public class PictureTakerActivity extends Activity {
             // begin
             // the preview.
             Camera.Parameters parameters = mCamera.getParameters();
-            parameters.setPreviewSize( w, h);
-            mCamera.setParameters( parameters);
+            
+            try {
+            	List<Camera.Size> supported_sizes = parameters.getSupportedPreviewSizes();
+				if (!supported_sizes.isEmpty()) {
+					Camera.Size s = null;
+					Iterator<Camera.Size> it = supported_sizes.iterator();
+					while (it.hasNext()) {
+						Camera.Size size = (Camera.Size) it.next();
+						if (size.width <= w) {
+							s = size;
+						} else {
+							break;
+						}
+					}
+					if (s == null) {
+						s = supported_sizes.get(0);
+					}
+					parameters.setPreviewSize(s.width, s.height);
+					mCamera.setParameters(parameters);
+            	}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e(IDroidTrackerConstants.CAUCHY_LOG, "Picture Preview Params could not be saved: ", e);
+			}
             mCamera.startPreview();
             
             // Wait 2s and take a picture
