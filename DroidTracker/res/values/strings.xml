@@ -158,8 +158,7 @@
 		guessed, this application can send a large number of SMS and should
 		therefore be used carefully for people with no unlimited SMS plans.
 	</string>
-	<string name="about_footer">\n\nMost icons by Axialis Team:
-		http://www.axialis.com/free/icons</string>
+	<string name="about_footer"></string>
 
 	<string name="help_label">Help</string>
 	<string name="help_header">

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="DroidTrackerTheme" parent="android:Theme">
+    	 <item name="android:windowTitleSize">49dip</item>  
+         <item name="android:windowTitleBackgroundStyle">@style/WindowTitleBackground</item>
+         <item name="android:windowTitleStyle">@style/MyWindowTitle</item>
+    </style>
+    
+    <style name="WindowTitleBackground" parent="android:WindowTitleBackground">     
+		<item name="android:background">@color/android:black</item>
+    </style>
+    <style name="MyWindowTitle" parent="android:WindowTitle">
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/MyDefaultTextAppearance</item>
+        <item name="android:shadowColor">#000</item>
+        <item name="android:shadowRadius">3</item>
+    </style>
+    <style name="MyDefaultTextAppearance" parent="@android:style/TextAppearance.WindowTitle">
+    	<item name="android:textSize">14dip</item>
+    	<item name="android:textColor">#FFFFFF</item>
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:padding">10dip</item>
+    </style>
+    
+</resources>

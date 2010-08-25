@@ -34,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -69,6 +70,11 @@ public class DroidTracker extends ListActivity implements
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate( icicle);
+        
+        // Request Custom Title and set Theme
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setTheme( R.style.DroidTrackerTheme);
+        
         setContentView( R.layout.main);
         Spinner spinner = (Spinner) this.findViewById( R.id.mode_spinner);
         
@@ -106,6 +112,9 @@ public class DroidTracker extends ListActivity implements
         
         mPrefs = getSharedPreferences( IDroidTrackerConstants.SHARED_PREFERENCES_KEY_MAIN, MODE_PRIVATE);
         selectedTrackerId = mPrefs.getLong( "selectedTrackerId", -1);
+        
+        // Set Custom Title
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
     }
     
     @Override
@@ -202,16 +211,21 @@ public class DroidTracker extends ListActivity implements
         menu.add( Menu.NONE,
                   MENU_NEW_TRACKER_ID,
                   Menu.NONE,
-                  R.string.new_tracker_menu).setIcon( R.drawable.new_tracker);
+                  R.string.new_tracker_menu)
+            .setIcon( R.drawable.ic_menu_invite);
+            //.setIcon( R.drawable.new_tracker);
         menu.add( Menu.NONE,
                   MENU_STOP_ALL_TRACKING_ID,
                   Menu.NONE,
                   R.string.stop_tracking_menu)
-            .setIcon( R.drawable.stop_tracking);
+            .setIcon( R.drawable.ic_menu_block);
+            //.setIcon( R.drawable.stop_tracking);
         menu.add( Menu.NONE, MENU_SETTINGS, Menu.NONE, R.string.settings_menu)
-            .setIcon( R.drawable.settings);
+            .setIcon( android.R.drawable.ic_menu_preferences);
+            //.setIcon( R.drawable.settings);
         menu.add( Menu.NONE, MENU_ABOUT, Menu.NONE, R.string.about_menu)
-            .setIcon( R.drawable.about);
+            .setIcon( android.R.drawable.ic_menu_info_details);
+            //.setIcon( R.drawable.about);
         return result;
     }
     
