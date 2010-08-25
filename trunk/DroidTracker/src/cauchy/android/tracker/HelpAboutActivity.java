@@ -18,12 +18,17 @@ package cauchy.android.tracker;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.TabHost;
 
 public class HelpAboutActivity extends TabActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState);
+        
+        // Request Custom Title and set Theme
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setTheme( R.style.DroidTrackerTheme);
         
         TabHost host = getTabHost();
         Intent help_intent = new Intent( IDroidTrackerConstants.HELP_ACTION,
@@ -40,15 +45,18 @@ public class HelpAboutActivity extends TabActivity {
                                           FAQActivity.class);
         host.addTab( host.newTabSpec( IDroidTrackerConstants.ABOUT_TAG)
                          .setIndicator( getText( R.string.about_label),
-                                        getResources().getDrawable( R.drawable.about))
+                                        getResources().getDrawable( android.R.drawable.ic_dialog_info))
                          .setContent( about_intent));
         host.addTab( host.newTabSpec( IDroidTrackerConstants.HELP_TAG)
                          .setIndicator( getText( R.string.help_label),
-                                        getResources().getDrawable( R.drawable.help))
+                                        getResources().getDrawable(  android.R.drawable.ic_dialog_alert))
                          .setContent( help_intent));
         host.addTab( host.newTabSpec( IDroidTrackerConstants.FAQ_TAG)
                      .setIndicator( getText( R.string.faq_label),
-                                    getResources().getDrawable( R.drawable.faq))
+                                    getResources().getDrawable(  android.R.drawable.ic_dialog_email))
                      .setContent( faq_intent));
+        
+        // Set Custom Title
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
     }
 }

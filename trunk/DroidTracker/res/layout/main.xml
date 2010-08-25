@@ -10,6 +10,8 @@
 						android:layout_gravity="center_horizontal"
 						android:text="@string/trackers_list_title" />
 	-->
+	
+	<!--
 	<ImageView
         android:id="@+id/banner"
         android:layout_width="wrap_content"
@@ -17,10 +19,12 @@
         android:layout_marginRight="6dip"
         android:layout_gravity="center"
         android:src="@drawable/banner" />
-						
+	-->					
 	<Spinner android:id="@+id/mode_spinner"
 					 android:layout_width="fill_parent"
 					 android:layout_height="wrap_content"
+					 android:paddingTop="5dip"
+					 android:paddingBottom="5dip"
 					 />
 	<ListView android:id="@id/android:list"
 	          android:layout_width="fill_parent"

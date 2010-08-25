@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="cauchy.android.tracker" android:versionName="1.15" android:versionCode="16">
-	<uses-sdk android:minSdkVersion="2" android:targetSdkVersion="5"/>
-	
+	package="cauchy.android.tracker" android:versionName="1.16" android:versionCode="17">
+	<uses-sdk android:minSdkVersion="2" android:targetSdkVersion="7"/>
+	<supports-screens android:smallScreens="true" 
+                  android:normalScreens="true" 
+                  android:largeScreens="true" 
+                  android:anyDensity="true" />
 	<uses-permission android:name="android.permission.RECEIVE_SMS" />
 	<uses-permission android:name="android.permission.READ_CONTACTS" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
