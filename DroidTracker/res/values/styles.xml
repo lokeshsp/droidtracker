@@ -16,10 +16,12 @@
         <item name="android:shadowRadius">3</item>
     </style>
     <style name="MyDefaultTextAppearance" parent="@android:style/TextAppearance.WindowTitle">
-    	<item name="android:textSize">14dip</item>
-    	<item name="android:textColor">#FFFFFF</item>
-    	<item name="android:textStyle">bold</item>
-    	<item name="android:padding">10dip</item>
+        <!-- Now that I use a custom image as title, set text to black to hide it at startup-->
+        <item name="android:textColor">@color/android:black</item>-->
+<!--    	<item name="android:textSize">14dip</item>-->
+<!--    	<item name="android:textColor">#FFFFFF</item>-->
+<!--    	<item name="android:textStyle">bold</item>-->
+<!--    	<item name="android:padding">10dip</item>-->
     </style>
     
 </resources>
