@@ -1,6 +1,7 @@
 package cauchy.android.tracker;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +54,7 @@ public class ContactAccessorOldApi extends ContactAccessor {
 	
 	@Override
 	public String getContactPhoneNumber(Context ctx, long contactId) {
-		// You know have the number so now query it like this
+		// You now have the number so now query it like this
 		Cursor phones = ctx.getContentResolver().query( 
 				android.provider.Contacts.Phones.CONTENT_URI, 
 			      null, 
@@ -127,7 +128,7 @@ public class ContactAccessorOldApi extends ContactAccessor {
               android.provider.Contacts.Phones.PERSON_ID,
               android.provider.Contacts.Phones.NAME };
 		
-		// You know have the number so now query it like this
+		// You now have the number so now query it like this
 		Cursor cur = ctx.getContentResolver().query(
 				//Uri.parse( contact_uri.toString() + "/" + contactId),
 				contact_uri,
@@ -154,6 +155,12 @@ public class ContactAccessorOldApi extends ContactAccessor {
 			cur.close();
 		}
 		return "";
+	}
+
+	@Override
+	public long getPersonIdFromPhoneId(ContentResolver contentResolver,
+									   long trackerId) {
+		return trackerId;
 	}
 	
 }
