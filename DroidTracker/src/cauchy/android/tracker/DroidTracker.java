@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -654,8 +653,8 @@ public class DroidTracker extends ListActivity implements
         // Request the selected record.
         String[] projection = ContactAccessor.getInstance().getProjection(new_contact);
         
-        Log.d( CAUCHY_LOG, "Query Contact result URI =  "
-                + Uri.parse( source_intent.getDataString()));
+//        Log.d( CAUCHY_LOG, "Query Contact result URI =  "
+//                + Uri.parse( source_intent.getDataString()));
         
         
         cur = managedQuery( source_intent.getData(),
@@ -674,6 +673,9 @@ public class DroidTracker extends ListActivity implements
         
         while ( cur.moveToNext()) {
             long tracker_id = cur.getLong( id_col);
+            if ( !new_contact) {
+            	tracker_id = ContactAccessor.getInstance().getPersonIdFromPhoneId( getContentResolver(), tracker_id);
+            }
             String tracker_name = cur.getString( name_col);
             String tracker_number;
             if ( new_contact) {

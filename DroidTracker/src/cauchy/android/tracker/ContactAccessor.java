@@ -1,6 +1,7 @@
 package cauchy.android.tracker;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -67,5 +68,6 @@ public abstract class ContactAccessor {
 	public abstract String getContactName(Context ctx, long contact_id);
 	public abstract Drawable getContactImage(Context ctx, long tracker_id);
 	public abstract String getContactEmail(Activity activity, long tracker_id);
+	public abstract long getPersonIdFromPhoneId(ContentResolver content_resolver, long tracker_id);
 	
 }

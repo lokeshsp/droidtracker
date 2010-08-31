@@ -3,6 +3,7 @@ package cauchy.android.tracker;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -78,24 +79,8 @@ public class ContactAccessorNewApi extends ContactAccessor {
 	
 	@Override
 	public Drawable getContactImage(Context ctx, long tracker_id) {
-		// Get Contact Id
-		Uri contact_uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-		contact_uri = Uri.parse( contact_uri.toString() + "/" + tracker_id);
-		Cursor cur = ctx.getContentResolver().query( 
-				contact_uri, 
-				null,
-				null,
-				null,
-				null);
-		Log.d( IDroidTrackerConstants.CAUCHY_LOG, "-> getContactEmail cur.getCount() = " + cur.getCount());
-		if ( cur.getCount() < 1) {
-			return null;
-		}
-		cur.moveToFirst();
-		String id = cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-		
 		// Use it to get Photo
-		Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, Long.parseLong(id));
+		Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, tracker_id);
 		Bitmap bitmap;
 		    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(), uri);
 		    if (input == null) {
@@ -108,23 +93,6 @@ public class ContactAccessorNewApi extends ContactAccessor {
 	
 	@Override
 	public String getContactEmail(Activity activity, long tracker_id) {
-		// Get Contact Id
-		Uri contact_uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-		contact_uri = Uri.parse( contact_uri.toString() + "/" + tracker_id);
-		Cursor cur = activity.getContentResolver().query( 
-				contact_uri, 
-				null,
-				null,
-				null,
-				null);
-		Log.d( IDroidTrackerConstants.CAUCHY_LOG, "-> getContactEmail cur.getCount() = " + cur.getCount());
-		if ( cur.getCount() < 1) {
-			return "";
-		}
-		cur.moveToFirst();
-		String id = cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-		
-		Log.d( IDroidTrackerConstants.CAUCHY_LOG, "-> tracker_id / id = " + tracker_id + " / " + id);
 		
 		// Use it to get Email
 		String[] projection = new String[] {
@@ -136,7 +104,7 @@ public class ContactAccessorNewApi extends ContactAccessor {
 				ContactsContract.CommonDataKinds.Email.CONTENT_URI, 
 				projection,
 				ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", 
-				new String[]{""+id},
+				new String[]{""+tracker_id},
 				null);
 		Log.d( IDroidTrackerConstants.CAUCHY_LOG, "-> getContactEmail for" + tracker_id + " cur size = " + emailCur.getCount());
 		try {
@@ -158,37 +126,37 @@ public class ContactAccessorNewApi extends ContactAccessor {
 
 	@Override
 	public String getContactName(Context ctx, long contactId) {
+		
+		// You know have the number so now query it like this
+		Cursor cur = ctx.getContentResolver().query(
+				ContactsContract.Contacts.CONTENT_URI, null,
+				ContactsContract.Contacts._ID + " = " + contactId, null, null);
+		while (cur.moveToNext()) {
+			String name = cur.getString(cur
+					.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+			if (name != null) {
+				return name;
+			}
+		}
+		cur.close();
+		return "";
+	}
+	
+	public long getPersonIdFromPhoneId(ContentResolver content_resolver, long tracker_id) {
 		// Get Contact Id
 		Uri contact_uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-		contact_uri = Uri.parse( contact_uri.toString() + "/" + contactId);
-		Cursor cur = ctx.getContentResolver().query( 
+		contact_uri = Uri.parse( contact_uri.toString() + "/" + tracker_id);
+		Cursor cur = content_resolver.query( 
 				contact_uri, 
 				null,
 				null,
 				null,
 				null);
-		Log.d( IDroidTrackerConstants.CAUCHY_LOG, "-> getContactEmail cur.getCount() = " + cur.getCount());
 		if ( cur.getCount() < 1) {
-			return "";
+			return -1;
 		}
 		cur.moveToFirst();
-		String result = cur.getString(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-		cur.close();
-		
-		return result;
-		
-//		// You know have the number so now query it like this
-//		Cursor cur = ctx.getContentResolver().query(
-//				ContactsContract.Contacts.CONTENT_URI, null,
-//				ContactsContract.Contacts._ID + " = " + contactId, null, null);
-//		while (cur.moveToNext()) {
-//			String name = cur.getString(cur
-//					.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//			if (name != null) {
-//				return name;
-//			}
-//		}
-//		cur.close();
-//		return "";
+		long id = cur.getLong(cur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+		return id;
 	}
 }
