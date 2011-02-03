@@ -121,6 +121,7 @@ public class ContactAccessorOldApi extends ContactAccessor {
         return tracker_email;
 	}
 
+	/*
 	@Override
 	public String getContactName(Context ctx, long contactId) {
 		Uri contact_uri = android.provider.Contacts.Phones.CONTENT_URI;
@@ -156,6 +157,7 @@ public class ContactAccessorOldApi extends ContactAccessor {
 		}
 		return "";
 	}
+    */
 
 	@Override
 	public long getPersonIdFromPhoneId(ContentResolver contentResolver,

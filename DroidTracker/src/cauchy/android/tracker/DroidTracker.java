@@ -125,6 +125,7 @@ public class DroidTracker extends ListActivity implements
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
 		
 		contactFilterButton = (ImageButton)findViewById(R.id.action_button);
+		contactFilterButton.setVisibility(View.VISIBLE);
 		
 		final ActionItem allTrackersAction = new ActionItem();
 		allTrackersAction.setTitle(getString(R.string.all_trackers_label));
@@ -439,11 +440,6 @@ public class DroidTracker extends ListActivity implements
                                                             fillTrackersList();
                                                         }
                                                         break;
-                                                    case 2:
-                                                        if ( selectedTracker != null) {
-                                                            updateTrackerFromID( selectedTracker.id);
-                                                        }
-                                                        break;
                                                     default:
                                                         break;
                                                 }
@@ -458,14 +454,12 @@ public class DroidTracker extends ListActivity implements
                 final TextView ms_period_view = (TextView) textEntryView.findViewById( R.id.ms_period);
                 final TextView period_suffix = (TextView) textEntryView.findViewById( R.id.period_suffix);
                 final Spinner spinner = (Spinner) textEntryView.findViewById( R.id.period_spinner);
-                OnItemSelectedListener l = new OnItemSelectedListener() {
+                OnItemSelectedListener l = new AdapterView.OnItemSelectedListener() {
                     
-                    @SuppressWarnings("unchecked")
-                    public void onNothingSelected(AdapterView arg0) {
+                    public void onNothingSelected(AdapterView<?> arg0) {
                     }
                     
-                    @SuppressWarnings("unchecked")
-                    public void onItemSelected(AdapterView parent,
+                    public void onItemSelected(AdapterView<?> parent,
                                                View v,
                                                int position,
                                                long id) {
@@ -770,98 +764,5 @@ public class DroidTracker extends ListActivity implements
 
     private String getContactEmail(long tracker_id) {
         return ContactAccessor.getInstance().getContactEmail(this, tracker_id);
-    }
-    
-    public void updateTrackerFromID(long id) {
-//        Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//               "updateTrackerFromID(" + id + ")");
-//        Uri contact_uri = Contacts.Phones.CONTENT_URI;
-//        
-//        // Request the selected record.
-//        // String[] projection = new String[] {
-//        // android.provider.BaseColumns._ID,
-//        // android.provider.Contacts.PeopleColumns.NAME,
-//        // android.provider.Contacts.PhonesColumns.NUMBER };
-//        String[] projection = new String[] {
-//                android.provider.Contacts.Phones.PERSON_ID,
-//                android.provider.Contacts.PeopleColumns.NAME,
-//                android.provider.Contacts.PhonesColumns.NUMBER };
-//        
-//        // Cursor cur = this.managedQuery( contact_uri,
-//        // projection,
-//        // People._ID + "=\'" + id + "\'",
-//        // null,
-//        // People.NAME + " ASC");
-//        
-//        Cursor cur = managedQuery( Uri.parse( contact_uri.toString() + "/" + id),
-//                                   projection, // Which columns to return.
-//                                   null,
-//                                   null, // WHERE clause.
-//                                   People.NAME + " ASC"); // Sort order.
-//        
-//        int id_col = cur.getColumnIndex( android.provider.Contacts.Phones.PERSON_ID);
-//        int name_col = cur.getColumnIndex( android.provider.Contacts.PeopleColumns.NAME);
-//        int number_col = cur.getColumnIndex( android.provider.Contacts.PhonesColumns.NUMBER);
-//        
-//        while ( cur.moveToNext()) {
-//            
-//            long tracker_id = cur.getLong( id_col);
-//            String tracker_name = cur.getString( name_col);
-//            String tracker_number = cur.getString( number_col);
-//            String tracker_email = getContactEmail( tracker_id);
-////            Uri mContacts = Contacts.ContactMethods.CONTENT_URI;
-////            
-////            String[] mail_projection = new String[] {
-////                    Contacts.Phones.PERSON_ID,
-////                    Contacts.ContactMethods.KIND, Contacts.ContactMethods.DATA };
-////            
-////            Cursor c = this.managedQuery( mContacts,
-////                                          mail_projection,
-////                                          Contacts.Phones.PERSON_ID
-////                                                  + "=\'"
-////                                                  + cur.getLong( id_col) + "\'",
-////                                          null,
-////                                          Contacts.Phones.PERSON_ID
-////                                                  + " ASC");
-////            int email_col = c.getColumnIndex( Contacts.ContactMethods.DATA);
-////            c.moveToFirst();
-////            String tracker_email;
-////            try {
-////                tracker_email = c.getString( email_col);
-////            } catch ( Exception e) {
-////                tracker_email = "";
-////            }
-//            
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "tracker_id = " + tracker_id);
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "tracker_name = " + tracker_name);
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "tracker_number = " + tracker_number);
-//            Log.d( IDroidTrackerConstants.CAUCHY_LOG,
-//                   "tracker_email = " + tracker_email);
-//            dataManager.updateTracker( tracker_id,
-//                                       tracker_name,
-//                                       tracker_number,
-//                                       tracker_email);
-//        }
-//        cur.close();
-//        fillTrackersList();
-    	
-		String tracker_name = ContactAccessor.getInstance().getContactName(
-				getApplicationContext(), id);
-		String tracker_number = ContactAccessor.getInstance()
-				.getContactPhoneNumber(getApplicationContext(), id);
-		String tracker_email = getContactEmail(id);
-		Log.d(IDroidTrackerConstants.CAUCHY_LOG, "tracker_id = " + id);
-		Log.d(IDroidTrackerConstants.CAUCHY_LOG, "tracker_name = "
-				+ tracker_name);
-		Log.d(IDroidTrackerConstants.CAUCHY_LOG, "tracker_number = "
-				+ tracker_number);
-		Log.d(IDroidTrackerConstants.CAUCHY_LOG, "tracker_email = "
-				+ tracker_email);
-		dataManager.updateTracker(id, tracker_name, tracker_number,
-				tracker_email);
-		fillTrackersList();
     }
 }
