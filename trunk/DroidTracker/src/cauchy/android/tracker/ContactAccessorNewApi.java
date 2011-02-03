@@ -124,6 +124,7 @@ public class ContactAccessorNewApi extends ContactAccessor {
 		return "";
 	}
 
+	/*
 	@Override
 	public String getContactName(Context ctx, long contactId) {
 		
@@ -141,6 +142,7 @@ public class ContactAccessorNewApi extends ContactAccessor {
 		cur.close();
 		return "";
 	}
+	*/
 	
 	public long getPersonIdFromPhoneId(ContentResolver content_resolver, long tracker_id) {
 		// Get Contact Id

@@ -175,10 +175,7 @@
 		display to view only people currently tracking you. However, even in
 		the default mode, people tracking you will be shown.\nWarning: When
 		adding a new tracker, part of this contact\'s information is copied to
-		the tracker\'s database. If the contact information changes (number
-		changed, mail address added...), please make sure to update the
-		tracker\'s data simply by pressing on the contact\'s name and choosing
-		\"Refresh Contact Data\" from the menu.\n
+		the tracker\'s database.\n
 		You can of course remove
 		tracking permission from any of your contacts.
 		This is done by simply

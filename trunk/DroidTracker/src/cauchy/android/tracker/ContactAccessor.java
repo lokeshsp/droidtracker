@@ -47,7 +47,7 @@ public abstract class ContactAccessor {
 	public abstract String getPersonIdColumn(boolean new_contact);
 	
 	public abstract String getContactPhoneNumber(Context ctx, long contact_id);
-	public abstract String getContactName(Context ctx, long contact_id);
+	//public abstract String getContactName(Context ctx, long contact_id);
 	public abstract Drawable getContactImage(Context ctx, long tracker_id);
 	public abstract String getContactEmail(Activity activity, long tracker_id);
 	public abstract long getPersonIdFromPhoneId(ContentResolver content_resolver, long tracker_id);

@@ -27,6 +27,9 @@ import android.preference.PreferenceScreen;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.widget.ImageButton;
 
 public class TrackingPreferences extends PreferenceActivity {
     
@@ -37,13 +40,26 @@ public class TrackingPreferences extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        
+        // Request Custom Title and set Theme
+        requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+        setTheme( R.style.DroidTrackerTheme);
+        
         super.onCreate( savedInstanceState);
+        
+        
         
         setPreferenceScreen( createPreferenceHierarchy());
         smsPassphraseLostphonePref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_ACTIVATE_LOST_PHONE_MODE);
         picasaLoginPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
         picasaPasswordPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
         picasaAlbumPref.setDependency( IDroidTrackerConstants.PREFERENCE_KEY_SEND_PICTURE_TO_PICASA);
+        
+        // Set Custom Title
+        getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
+        
+        ImageButton contactFilterButton = (ImageButton)findViewById(R.id.action_button);
+        contactFilterButton.setVisibility(View.GONE);
     }
     
     private PreferenceScreen createPreferenceHierarchy() {
