@@ -17,7 +17,7 @@ package cauchy.android.tracker;
 
 public interface IDroidTrackerConstants {
 
-    public static final String CAUCHY_LOG = "[CAUCHY_LOG]";
+    public static final String CAUCHY_LOG = "[DroidTracker]";
     
     public static final long TRACKING_CHECK_PERIOD_MS = 60 * 1000; // 1 minute
     

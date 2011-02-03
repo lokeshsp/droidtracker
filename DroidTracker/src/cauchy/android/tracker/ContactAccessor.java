@@ -19,24 +19,6 @@ public abstract class ContactAccessor {
             } else {
             	sInstance = new ContactAccessorNewApi();
             }
-            
-        	
-        	
-//            String className;
-//            int sdkVersion = Integer.parseInt(Build.VERSION.SDK);
-//            if (sdkVersion < Build.VERSION_CODES.ECLAIR) {
-//                className = "ContactAccessorOldApi";
-//            } else {
-//                className = "ContactAccessorNewApi";
-//            }
-//            try {
-//                Class<? extends ContactAccessor> clazz =
-//                        Class.forName(ContactAccessor.class.getPackage() + "." + className)
-//                                .asSubclass(ContactAccessor.class);
-//                sInstance = clazz.newInstance();
-//            } catch (Exception e) {
-//                throw new IllegalStateException(e);
-//            }
         }
         return sInstance;
     }

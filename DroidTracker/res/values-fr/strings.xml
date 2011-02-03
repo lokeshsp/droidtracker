@@ -4,7 +4,7 @@
 
 	<string name="trackers_list_title">Liste des Traqueurs</string>
 	<string name="no_trackers">Personne!</string>
-	<string name="all_trackers_label">Contacts autorisés à me traquer</string>
+	<string name="all_trackers_label">Tous les Contacts</string>
 	<string name="tracking_only_label">Traques en cours</string>
 	<string name="new_tracker_menu">Ajouter un traqueur</string>
 	<string name="remove_tracker_menu">Supprimer Permission</string>

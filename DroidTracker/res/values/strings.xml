@@ -4,8 +4,8 @@
 
 	<string name="trackers_list_title">List of Trackers</string>
 	<string name="no_trackers">No one!</string>
-	<string name="all_trackers_label">All Contacts with Permission</string>
-	<string name="tracking_only_label">People Currently Tracking You</string>
+	<string name="all_trackers_label">All Contacts</string>
+	<string name="tracking_only_label">Currently Tracking Only</string>
 	<string name="new_tracker_menu">Add Tracker</string>
 	<string name="remove_tracker_menu">Remove Permission</string>
 	<string name="stop_tracking_menu">Stop All Tracking</string>
