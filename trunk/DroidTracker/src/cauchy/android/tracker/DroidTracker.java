@@ -17,6 +17,8 @@ package cauchy.android.tracker;
 
 import java.util.List;
 
+import net.londatiga.android.ActionItem;
+import net.londatiga.android.QuickAction;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -32,15 +34,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 public class DroidTracker extends ListActivity implements
                                               IDroidTrackerConstants {
@@ -64,6 +68,7 @@ public class DroidTracker extends ListActivity implements
     private TrackersDataManager dataManager;
     private long selectedTrackerId = -1;
     private SharedPreferences mPrefs;
+    private ImageButton contactFilterButton;
     
     /** Called when the activity is first created. */
     @Override
@@ -75,6 +80,7 @@ public class DroidTracker extends ListActivity implements
         setTheme( R.style.DroidTrackerTheme);
         
         setContentView( R.layout.main);
+        /*
         Spinner spinner = (Spinner) this.findViewById( R.id.mode_spinner);
         
         ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>( this,
@@ -84,6 +90,7 @@ public class DroidTracker extends ListActivity implements
         spinner_adapter.add( getString( R.string.all_trackers_label));
         spinner_adapter.add( getString( R.string.tracking_only_label));
         spinner.setAdapter( spinner_adapter);
+        */
         
         Tracker.setPeriodPassPhraseMessageElements( getString( R.string.tracker_periodicity_prefix),
                                                     getString( R.string.tracker_periodicity_suffix));
@@ -91,6 +98,7 @@ public class DroidTracker extends ListActivity implements
         dataManager = new TrackersDataManager( this);
 //        fillTrackersList();
         
+        /*
         OnItemSelectedListener l = new OnItemSelectedListener() {
             
             @SuppressWarnings("unchecked")
@@ -108,12 +116,75 @@ public class DroidTracker extends ListActivity implements
             }
         };
         spinner.setOnItemSelectedListener( l);
+        */
         
         mPrefs = getSharedPreferences( IDroidTrackerConstants.SHARED_PREFERENCES_KEY_MAIN, MODE_PRIVATE);
         selectedTrackerId = mPrefs.getLong( "selectedTrackerId", -1);
         
         // Set Custom Title
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.window_title);
+		
+		contactFilterButton = (ImageButton)findViewById(R.id.action_button);
+		
+		final ActionItem allTrackersAction = new ActionItem();
+		allTrackersAction.setTitle(getString(R.string.all_trackers_label));
+		allTrackersAction.setIcon(getResources().getDrawable(R.drawable.all_contacts));
+
+		final ActionItem activeTrackersOnlyAction = new ActionItem();
+		activeTrackersOnlyAction.setTitle(getString(R.string.tracking_only_label));
+		activeTrackersOnlyAction.setIcon(getResources().getDrawable(R.drawable.tracking_contacts));
+
+		
+		
+		contactFilterButton.setOnClickListener( new View.OnClickListener() {
+            
+            @Override
+            public void onClick(View v) {
+                final QuickAction mQuickAction  = new QuickAction(contactFilterButton);
+                
+                allTrackersAction.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTrackingOnlyMode = false;
+                        contactFilterButton.setImageResource(R.drawable.all_contacts);
+                        mQuickAction.dismiss();
+                        fillTrackersList();
+                    }
+                });
+
+                activeTrackersOnlyAction.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showTrackingOnlyMode = true;
+                        contactFilterButton.setImageResource(R.drawable.tracking_contacts);
+                        mQuickAction.dismiss();
+                        fillTrackersList();
+                    }
+                });
+                
+                mQuickAction.addActionItem(allTrackersAction);
+                mQuickAction.addActionItem(activeTrackersOnlyAction);
+                
+                mQuickAction.setAnimStyle(QuickAction.ANIM_AUTO);
+                
+                /*
+                mQuickAction.setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        if (showTrackingOnlyMode) {
+                    contactFilterButton.setImageResource(R.drawable.tracking_contacts);
+                } else {
+                    contactFilterButton.setImageResource(R.drawable.all_contacts);
+                }
+                    }
+                });
+                */
+                
+                mQuickAction.show();
+            }
+        });
+		
+		
     }
     
     @Override
@@ -656,6 +727,10 @@ public class DroidTracker extends ListActivity implements
 //        Log.d( CAUCHY_LOG, "Query Contact result URI =  "
 //                + Uri.parse( source_intent.getDataString()));
         
+        if (source_intent == null) {
+            Log.e(IDroidTrackerConstants.CAUCHY_LOG, "Error: No Contact Received from Add Contact Intent.");
+            return;
+        }
         
         cur = managedQuery( source_intent.getData(),
                             projection, // Which columns to return.
