@@ -80,44 +80,11 @@ public class DroidTracker extends ListActivity implements
         setTheme( R.style.DroidTrackerTheme);
         
         setContentView( R.layout.main);
-        /*
-        Spinner spinner = (Spinner) this.findViewById( R.id.mode_spinner);
-        
-        ArrayAdapter<String> spinner_adapter = new ArrayAdapter<String>( this,
-                                                                         android.R.layout.simple_spinner_item);
-        spinner_adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-        
-        spinner_adapter.add( getString( R.string.all_trackers_label));
-        spinner_adapter.add( getString( R.string.tracking_only_label));
-        spinner.setAdapter( spinner_adapter);
-        */
         
         Tracker.setPeriodPassPhraseMessageElements( getString( R.string.tracker_periodicity_prefix),
                                                     getString( R.string.tracker_periodicity_suffix));
         
-        dataManager = new TrackersDataManager( this);
-//        fillTrackersList();
-        
-        /*
-        OnItemSelectedListener l = new OnItemSelectedListener() {
-            
-            @SuppressWarnings("unchecked")
-            public void onNothingSelected(AdapterView arg0) {
-                showTrackingOnlyMode = false;
-            }
-            
-            @SuppressWarnings("unchecked")
-            public void onItemSelected(AdapterView parent,
-                                       View v,
-                                       int position,
-                                       long id) {
-                showTrackingOnlyMode = ( position == 1);
-                fillTrackersList();
-            }
-        };
-        spinner.setOnItemSelectedListener( l);
-        */
-        
+        dataManager = new TrackersDataManager( this);        
         mPrefs = getSharedPreferences( IDroidTrackerConstants.SHARED_PREFERENCES_KEY_MAIN, MODE_PRIVATE);
         selectedTrackerId = mPrefs.getLong( "selectedTrackerId", -1);
         
@@ -134,8 +101,6 @@ public class DroidTracker extends ListActivity implements
 		final ActionItem activeTrackersOnlyAction = new ActionItem();
 		activeTrackersOnlyAction.setTitle(getString(R.string.tracking_only_label));
 		activeTrackersOnlyAction.setIcon(getResources().getDrawable(R.drawable.tracking_contacts));
-
-		
 		
 		contactFilterButton.setOnClickListener( new View.OnClickListener() {
             
@@ -167,19 +132,6 @@ public class DroidTracker extends ListActivity implements
                 mQuickAction.addActionItem(activeTrackersOnlyAction);
                 
                 mQuickAction.setAnimStyle(QuickAction.ANIM_AUTO);
-                
-                /*
-                mQuickAction.setOnDismissListener(new OnDismissListener() {
-                    @Override
-                    public void onDismiss() {
-                        if (showTrackingOnlyMode) {
-                    contactFilterButton.setImageResource(R.drawable.tracking_contacts);
-                } else {
-                    contactFilterButton.setImageResource(R.drawable.all_contacts);
-                }
-                    }
-                });
-                */
                 
                 mQuickAction.show();
             }
@@ -218,9 +170,6 @@ public class DroidTracker extends ListActivity implements
             }
         }
         List<Tracker> all_trackers = dataManager.fetchTrackers( showTrackingOnlyMode);
-        // ArrayAdapter<Tracker> adapter = new ArrayAdapter<Tracker>( this,
-        // R.layout.contacts,
-        // all_trackers);
         TrackersAdapter adapter = new TrackersAdapter( this,
                                                        R.layout.contacts,
                                                        all_trackers);
@@ -262,9 +211,13 @@ public class DroidTracker extends ListActivity implements
                         }
                     }
                 }
-                TextView tv = (TextView) v.findViewById( R.id.contact);
-                if ( tv != null) {
-                    tv.setText( t.toString());
+                TextView tv_contact = (TextView) v.findViewById( R.id.contact);
+                if ( tv_contact != null) {
+                    tv_contact.setText( t.toString());
+                }
+                TextView tv_number = (TextView) v.findViewById( R.id.number);
+                if ( tv_number != null) {
+                    tv_number.setText( t.number);
                 }
             }
             
@@ -302,18 +255,13 @@ public class DroidTracker extends ListActivity implements
     
     @Override
     public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        final Tracker selected_tracker = ( getSelectedItemPosition() < 0) ? null
-                : (Tracker) getListAdapter().getItem( getSelectedItemPosition());
-        // changed from removed item.getId()
         switch ( item.getItemId()) {
             case MENU_NEW_TRACKER_ID:
                 showDialog( DIALOG_NEW_TRACKER);
                 break;
             case MENU_STOP_ALL_TRACKING_ID:
-                if ( selected_tracker != null) {
-                    dataManager.stopAllTracking();
-                    fillTrackersList();
-                }
+                dataManager.stopAllTracking();
+                fillTrackersList();
                 break;
             case MENU_SETTINGS:
                 Intent settings_intent = new Intent( IDroidTrackerConstants.PREFERENCES_ACTION,
