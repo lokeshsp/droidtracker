@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal" android:layout_width="fill_parent"
-	android:layout_height="100dip">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_gravity="left"
+	android:padding="5dip"
+	android:layout_height="wrap_content">
 	<ImageView
         android:id="@+id/trackericon"
         android:layout_width="48dip"
@@ -11,8 +13,20 @@
         android:layout_marginTop="4dip"
         android:layout_marginBottom="4dip"
         android:layout_gravity="center"
+        android:layout_centerVertical="true"
+        android:scaleType="fitXY"
         android:src="@drawable/twitter" />
 	<TextView android:id="@+id/contact" android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:layout_gravity="center"
-		android:padding="14dip"/>
-</LinearLayout>
+		android:layout_height="wrap_content"
+		android:layout_gravity="left"
+		android:layout_toRightOf="@id/trackericon"
+		android:text="Contact Name"
+		android:layout_alignTop="@id/trackericon"
+		android:textSize="18sp"/>
+	<TextView android:id="@+id/number" android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:layout_gravity="left"
+        android:layout_toRightOf="@id/trackericon"
+        android:layout_below="@id/contact"
+        android:text="Contact Number"
+        android:textSize="14sp"/>
+</RelativeLayout>
