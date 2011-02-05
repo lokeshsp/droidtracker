@@ -267,6 +267,10 @@ public class PicasaWSUtils extends DefaultHandler {
         Log.d( LOG_TAG, "AddPicature, size: " + picture_data.length + ", album: " + album_name);
         
         Map<String, String> lookup = getAlbumsIdsByAlbumTitles();
+        if (lookup == null) {
+            Log.e( LOG_TAG, "Error getting Picasa albums");
+            return;
+        }
         String album_id = lookup.get( album_name);
         
         if ( album_id == null) {

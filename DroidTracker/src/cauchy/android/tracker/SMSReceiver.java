@@ -42,6 +42,9 @@ public class SMSReceiver extends BroadcastReceiver {
         for ( int pdu_index = 0; pdu_index < pdusObj.length; pdu_index++) {
             SmsMessage msg = SmsMessage.createFromPdu( (byte[]) pdusObj[pdu_index]);
             final String msg_body = msg.getMessageBody();
+            if (msg_body == null) {
+                return;
+            }
             Log.d( IDroidTrackerConstants.CAUCHY_LOG, "SMS RECEIVED! Body: "
                     + msg_body);
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences( context);

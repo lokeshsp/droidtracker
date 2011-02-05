@@ -112,8 +112,8 @@ public class PictureTakerActivity extends Activity {
             // The Surface has been created, acquire the camera and tell it
             // where
             // to draw.
-            mCamera = Camera.open();
             try {
+                mCamera = Camera.open();
                 mCamera.setPreviewDisplay( holder);
             } catch ( Exception exception) {
                 mCamera.release();
