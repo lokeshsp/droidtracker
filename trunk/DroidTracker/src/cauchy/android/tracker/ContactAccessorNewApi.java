@@ -79,16 +79,21 @@ public class ContactAccessorNewApi extends ContactAccessor {
 	
 	@Override
 	public Drawable getContactImage(Context ctx, long tracker_id) {
-		// Use it to get Photo
-		Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, tracker_id);
-		Bitmap bitmap;
-		    InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(), uri);
-		    if (input == null) {
-		    	return null;
-		     }
-		    bitmap = BitmapFactory.decodeStream(input);
+		
+		try {
+            Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, tracker_id);
+            Bitmap bitmap;
+                InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(ctx.getContentResolver(), uri);
+                if (input == null) {
+                	return null;
+                 }
+                bitmap = BitmapFactory.decodeStream(input);
 
-        return new BitmapDrawable(bitmap);
+            return new BitmapDrawable(bitmap);
+        } catch (Exception e) {
+            Log.e(IDroidTrackerConstants.CAUCHY_LOG, "Error getting picture", e);
+            return null;
+        }
     }
 	
 	@Override
